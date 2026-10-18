@@ -1,23 +1,417 @@
 aid: gbg
+
 name: GBG
-description: 'GBG is a company surfaced via the API Evangelist harvest backlog (source: kin-score-markets)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: GBG (gbgplc.com, which also runs investor relations pages) is an identity verification, location intelligence and fraud prevention
+  company. Its site describes solutions that help organisations quickly validate and verify the identity and location of their customers. Developers
+  integrate through the GBG GO identity verification platform, whose documented REST API covers access tokens, starting customer journeys, retrieving
+  and submitting tasks, and fetching journey state.
+
 url: https://raw.githubusercontent.com/api-evangelist/gbg/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:kin-score-markets
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-18 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-18'
+
 modified: '2026-10-18'
+
 tags:
 - Company
-apis: []
+- Identity Verification
+- Fraud Prevention
+- KYC
+- Location Intelligence
+- Compliance
+- Digital Identity
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
+image: https://www.gbgplc.com/media/fj1baavn/facebook-profile-picture.png
+
 common:
+- type: AgenticAccess
+  url: agentic-access/gbg-agentic-access.yml
+- type: Spectral
+  url: rules/gbg-rules.yml
+- type: JSONLD
+  url: json-ld/gbg-context.jsonld
+- type: Vocabulary
+  url: vocabulary/gbg-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/gbg-data-model.yml
+- type: ChangeLog
+  url: changelog/gbg-changelog.yml
+- type: Lifecycle
+  url: lifecycle/gbg-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/gbg-problem-types.yml
+- type: Conformance
+  url: conformance/gbg-conformance.yml
+- type: Overlay
+  url: overlays/gbg-go-v1-overlay.yaml
+- type: LLMsTxt
+  url: llms/gbg-llms.txt
+- type: AgentCard
+  url: a2a/gbg-a2a.yml
+- type: ToolCrosswalk
+  url: mcp/gbg-tool-crosswalk.yml
+- type: MCPServer
+  url: mcp/gbg-mcp.yml
+- type: WellKnown
+  url: well-known/gbg-well-known.yml
+- type: Hosts
+  url: hosts/gbg-hosts.yml
+- type: Vendors
+  url: vendors/gbg-vendors.yml
+- type: SDKs
+  url: packages/gbg-packages.yml
+- type: Packages
+  url: packages/gbg-packages.yml
+- type: Authentication
+  url: authentication/gbg-authentication.yml
+- type: DomainSecurity
+  url: security/gbg-domain-security.yml
 - type: Website
   url: https://gbgplc.com
+- type: DeveloperPortal
+  url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+- type: Documentation
+  url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+- type: APIReference
+  url: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+- type: GettingStarted
+  url: https://docs.go.gbgplc.com/docs/go-v2/get-started/quickstart/quickstartdev
+- type: Support
+  url: https://docs.go.gbgplc.com/docs/go-v2/get-started/troubleshooting-and-support
+- type: LLMsTxt
+  url: https://docs.go.gbgplc.com/llms.txt
+- type: Blog
+  url: https://www.gbg.com/en/blog/
+- type: GitHubOrganization
+  url: https://github.com/GBGPLC
+- type: Contact
+  url: https://www.gbgplc.com/contact-us/
+- type: TermsOfService
+  url: https://www.gbgplc.com/legal-and-regulatory/
+- type: PrivacyPolicy
+  url: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+
+apis:
+- aid: gbg:gbg-id3global
+  name: GBG ID3global
+  description: >-
+    GBG's ID3global identity verification SOAP web service (WCF), served from id3global.com (site titled
+    "GBG | ID3global", copyright GB Group plc), with 179 operations; a pilot environment is at pilot.id3global.com.
+  humanURL: https://www.id3global.com/
+  baseURL: https://id3global.com/ID3gWS/ID3global.svc
+  tags:
+  - Identity Verification
+  - SOAP
+  properties:
+  - type: WSDL
+    url: wsdl/gbg-id3global.wsdl
+  - type: WSDL
+    name: WSDL (provider-hosted)
+    url: https://id3global.com/ID3gWS/ID3global.svc?singleWsdl
+  - type: WSDL
+    name: WSDL (pilot)
+    url: https://pilot.id3global.com/ID3gWS/ID3global.svc?singleWsdl
+- aid: gbg:gbg-as-api
+  name: GBG As API
+  description: The As API from GBG — 1 operation(s) for as.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - As
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-as-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-authentication-api
+  name: GBG Authentication API
+  description: The Authentication API from GBG — 1 operation(s) for authentication.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-customer-apis-api
+  name: GBG Customer APIs API
+  description: The Customer APIs API from GBG — 6 operation(s) for customer apis.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Customer APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-customer-apis-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-device-api
+  name: GBG Device API
+  description: The Device API from GBG — 4 operation(s) for device.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Device
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-device-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-end-user-apis-api
+  name: GBG End User APIs API
+  description: The End User APIs API from GBG — 3 operation(s) for end user apis.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - End User APIs
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-end-user-apis-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-health-api
+  name: GBG Health API
+  description: The Health API from GBG — 1 operation(s) for health.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-health-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-interaction-api
+  name: GBG Interaction API
+  description: The Interaction API from GBG — 6 operation(s) for interaction.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Interaction
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-interaction-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-interaction-service-api
+  name: GBG Interaction Service API
+  description: The Interaction Service API from GBG — 2 operation(s) for interaction service.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Interaction Service
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-interaction-service-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-journey-api
+  name: GBG Journey API
+  description: The Journey API from GBG — 9 operation(s) for journey.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Journey
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-journey-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-journey-execution-api
+  name: GBG Journey execution API
+  description: The Journey execution API from GBG — 1 operation(s) for journey execution.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Journey execution
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-journey-execution-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+- aid: gbg:gbg-sandbox-api
+  name: GBG Sandbox API
+  description: The Sandbox API from GBG — 2 operation(s) for sandbox.
+  humanURL: https://docs.go.gbgplc.com/docs/go-v2/api-reference/overview
+  baseURL: https://eu.platform.go.gbgplc.com/v2/captain
+  tags:
+  - Sandbox
+  properties:
+  - type: OpenAPI
+    url: openapi/gbg-sandbox-api-openapi.yml
+  - type: Documentation
+    url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+  - type: JSONSchema
+    url: json-schema/gbg-slim-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-interaction-fetch-response-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-create-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-update-sandbox-scenario-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-password-grant-request-schema.json
+  - type: JSONSchema
+    url: json-schema/gbg-client-credentials-grant-request-schema.json
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: gbgplc.com title "GBG | Identity Verification and Fraud Prevention Solutions"; GitHub org GBGPLC links gbg.com; docs.go.gbgplc.com is
+    GBG GO docs. newsroom/ redirect-loops, not recorded.
+  evidence:
+  - url: https://gbgplc.com
+    status: 200
+  - url: https://docs.go.gbgplc.com/docs/go-v2/homepage
+    status: 200
+  - url: https://docs.go.gbgplc.com/llms.txt
+    status: 200
+  - url: https://github.com/GBGPLC
+    status: 200
+  - url: https://www.gbg.com/en/blog/
+    status: 200
+x-enrichment:
+  date: '2026-10-18'
+  status: enriched
+  artifacts_added: 41
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=deepseek,regulatory=anthropic

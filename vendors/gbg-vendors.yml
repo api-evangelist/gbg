@@ -1,0 +1,78 @@
+generated: '2026-10-18'
+method: probed
+source: pre-flight dossier (docs platform, portal detections) + CNAME chains and response headers of the hosts apis.yml names
+registry: all/0-working/vendors.yml
+areas_vocabulary:
+- documentation
+- developer-portal
+- api-gateway
+- cdn
+- hosting
+- sdk-generation
+- api-collections
+- status-page
+- support
+- community
+- identity
+- mcp-hosting
+vendors:
+- vendor: cloudflare
+  name: Cloudflare
+  area: cdn
+  host: docs.go.gbgplc.com
+  evidence: header:cf-ray
+  signal: header
+  confidence: high
+  kin_score:
+  - https_enforced
+  - hsts
+- vendor: imperva
+  name: Imperva
+  area: cdn
+  host: gbgplc.com
+  evidence: header:x-cdn:imperva
+  signal: header
+  confidence: high
+  kin_score: []
+- vendor: mintlify
+  name: Mintlify
+  area: documentation
+  host: docs.go.gbgplc.com
+  evidence: markup:mintlify
+  signal: docs-platform
+  confidence: medium
+  kin_score:
+  - openapi_published
+  - llms_txt
+  - mcp_server
+  - markdown_negotiation
+  - x_mint_pointer
+- vendor: vercel
+  name: Vercel
+  area: hosting
+  host: docs.go.gbgplc.com
+  evidence: cname:cname.vercel-dns.com
+  signal: docs-platform
+  confidence: medium
+  kin_score: []
+reliance:
+  areas_vendor_served:
+  - cdn
+  - documentation
+  - hosting
+  vendor_count: 4
+  areas_observed: 12
+  share_of_observable_areas: 0.25
+  note: areas where a third party was DETECTED serving this provider; an area absent here was either self-run or not observed, and this script
+    cannot tell those apart
+checked:
+- 'docs-platform: mintlify'
+- gbgplc.com (Website)
+- docs.go.gbgplc.com (DeveloperPortal)
+- docs.go.gbgplc.com (Documentation)
+- docs.go.gbgplc.com (APIReference)
+- docs.go.gbgplc.com (GettingStarted)
+- docs.go.gbgplc.com (Support)
+- eu.platform.go.gbgplc.com (baseURL)
+- id3global.com (baseURL)
+- docs.go.gbgplc.com (mcp)

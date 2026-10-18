@@ -1,0 +1,54 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for GBG Go API v1
+  version: 1.0.0
+extends: ../openapi/_original/gbg-go-v1-openapi.yml
+x-generated: '2026-10-18'
+x-method: generated
+x-source: openapi/gbg-go-v1-openapi.yml
+x-rationale: 'The published GBG Go OpenAPI declares no operationIds. This overlay adds them without mutating the original: names come verbatim
+  from the provider''s own core SDK spec (openapi/_original/gbg-go-core-sdk-spec.yaml) where that spec declares the same method+path, and are
+  otherwise generated from the summary and marked x-operationId-origin: generated. It also links the provider-published MCP server, llms.txt and
+  agent skill.'
+actions:
+- target: $.paths['/as/token.oauth2'].post
+  description: Add operationId generateAccessToken (Generate access token)
+  update:
+    operationId: generateAccessToken
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/journey/start'].post
+  description: Add operationId startJourney (Start journey)
+  update:
+    operationId: startJourney
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/task/list'].post
+  description: Add operationId getTasks (Retrieve tasks)
+  update:
+    operationId: getTasks
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/task/list/schema'].post
+  description: Add operationId getTasksSchema (Retrieve tasks with their schema)
+  update:
+    operationId: getTasksSchema
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/task/schema'].post
+  description: Add operationId getTaskSchema (Retrieve task schema)
+  update:
+    operationId: getTaskSchema
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/task/update'].post
+  description: Add operationId updateTask (Submit task data)
+  update:
+    operationId: updateTask
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/state/fetch'].post
+  description: Add operationId getJourneyState (Fetch journey state)
+  update:
+    operationId: getJourneyState
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.info
+  description: Point agents at the provider-published agent surfaces.
+  update:
+    x-mcp-server: https://docs.go.gbgplc.com/mcp
+    x-llms-txt: https://docs.go.gbgplc.com/llms.txt
+    x-agent-skill: https://docs.go.gbgplc.com/.well-known/agent-skills/gbg/skill.md

@@ -1,0 +1,178 @@
+generated: '2026-10-18'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 14
+  own: 8
+  other_domain: 5
+  platform: 1
+  roles:
+  - api
+  - identity
+  - legal
+  - marketing
+  - other
+  - portal
+  - source
+  - website
+hosts:
+- host: api.gbg.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: gbg.com
+  role: api
+  relation: other-domain
+- host: api.gbgplc.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: gbgplc.com
+  role: api
+  relation: own
+- host: docs.go.gbgplc.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - DeveloperPortal
+  - Documentation
+  - APIReference
+  - GettingStarted
+  - Support
+  - LLMsTxt
+  serves:
+  - docs
+  - spec
+  - cdn
+  - documentation
+  - hosting
+  vendor: cloudflare
+  registrable_domain: gbgplc.com
+  role: portal
+  relation: own
+- host: eu.platform.go.gbgplc.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: gbgplc.com
+  role: other
+  relation: own
+- host: gbgplc.com
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  - vendor-detect
+  types:
+  - Website
+  serves:
+  - cdn
+  vendor: imperva
+  registrable_domain: gbgplc.com
+  role: website
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: id3global.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: id3global.com
+  role: other
+  relation: other-domain
+- host: investigate.gbgplc.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: gbgplc.com
+  role: other
+  relation: own
+- host: secureandtrusted.gbgplc.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  platform: app.safebase.io
+  registrable_domain: gbgplc.com
+  role: other
+  relation: own
+- host: sso.gbgplc.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: gbgplc.com
+  role: identity
+  relation: own
+- host: webhook.site
+  found_by:
+  - docs-index
+  types: []
+  serves:
+  - docs
+  registrable_domain: webhook.site
+  role: other
+  relation: other-domain
+- host: www.gbg.com
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - Blog
+  serves: []
+  registrable_domain: gbg.com
+  role: marketing
+  relation: other-domain
+- host: www.gbgplc.com
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - Contact
+  - TermsOfService
+  - PrivacyPolicy
+  serves: []
+  registrable_domain: gbgplc.com
+  role: legal
+  relation: own
+- host: www.id3global.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - docs
+  registrable_domain: id3global.com
+  role: other
+  relation: other-domain

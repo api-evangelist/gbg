@@ -1,0 +1,84 @@
+openapi: 3.2.0
+info:
+  title: GBG GO API Reference As API
+  description: The GBG GO API enables authentication, customer journey execution, task management, and tracking verification progress.
+  version: 1.0.0
+  license:
+    name: MIT
+servers:
+- url: https://eu.platform.go.gbgplc.com/captain/api
+- url: https://us.platform.go.gbgplc.com/captain/api
+- url: https://au.platform.go.gbgplc.com/captain/api
+- url: https://api.auth.gbgplc.com/as/token.oauth2
+security:
+- bearerAuth: []
+tags:
+- name: As
+paths:
+  /as/token.oauth2:
+    post:
+      summary: Generate access token
+      description: Get an access token to authenticate API requests. If you're unfamiliar with the authentication process, check out the authentication guide for more details.
+      servers:
+      - url: https://api.auth.gbgplc.com
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  description: The client ID assigned to your organization.
+                client_secret:
+                  type: string
+                  description: The client secret assigned to your organization.
+                username:
+                  type: string
+                  description: The username for API authentication.
+                password:
+                  type: string
+                  description: The password for API authentication.
+                grant_type:
+                  type: string
+                  enum:
+                  - password
+                  description: Must always be set to 'password'.
+              required:
+              - client_id
+              - client_secret
+              - username
+              - password
+              - grant_type
+      responses:
+        '200':
+          description: Successfully retrieved access token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: The access token used for authentication.
+                  expires_in:
+                    type: integer
+                    description: Token expiration time in seconds.
+                  token_type:
+                    type: string
+                    description: The type of token, usually 'Bearer'.
+        '400':
+          description: Invalid request. Check your credentials.
+        '401':
+          description: Unauthorized request. Invalid username or password.
+      tags:
+      - As
+      operationId: postAsTokenOauth2
+      x-operation-id-source: derived
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+x-mintlify:
+  version: v1

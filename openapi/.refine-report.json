@@ -1,0 +1,68 @@
+{
+  "provider": "gbg",
+  "sources": [
+    "_original/gbg-go-core-sdk-spec.yaml",
+    "_original/gbg-go-v2-openapi.json",
+    "gbg-go-v1-openapi.yml",
+    "gbg-go-v2-openapi.yml"
+  ],
+  "outputs": [
+    "gbg-customer-apis-api-openapi.yml",
+    "gbg-end-user-apis-api-openapi.yml",
+    "gbg-health-api-openapi.yml",
+    "gbg-interaction-service-api-openapi.yml",
+    "gbg-journey-execution-api-openapi.yml",
+    "gbg-authentication-api-openapi.yml",
+    "gbg-device-api-openapi.yml",
+    "gbg-interaction-api-openapi.yml",
+    "gbg-journey-api-openapi.yml",
+    "gbg-sandbox-api-openapi.yml",
+    "gbg-as-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/gbg-go-v1-openapi.yml",
+    "archived openapi/gbg-go-v2-openapi.yml"
+  ],
+  "errors": [
+    "gbg-go-core-sdk-spec.yaml: dangling $ref: #/schemas/lo0698Ug9ziO7ZbrEXxjfZxHNaMiK0mn"
+  ],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "gbg-go-core-sdk-spec.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "gbg-go-core-sdk-spec.yaml: declared missing tag: Journey execution",
+    "gbg-go-core-sdk-spec.yaml: multi-axis tagging (9 tags, 5 first tags, 1.69x duplication over 13 operations) \u2014 split on first tag, 9 operations narrowed",
+    "gbg-go-v2-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "gbg-go-v2-openapi.json: declared missing tag: Authentication",
+    "gbg-go-v2-openapi.json: declared missing tag: Device",
+    "gbg-go-v2-openapi.json: declared missing tag: Interaction",
+    "gbg-go-v2-openapi.json: declared missing tag: Journey",
+    "gbg-go-v2-openapi.json: declared missing tag: Sandbox",
+    "gbg-go-v1-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "gbg-go-v1-openapi.yml: tagged paths POST /as/token.oauth2 -> As",
+    "gbg-go-v1-openapi.yml: tagged paths POST /journey/start -> Journey",
+    "gbg-go-v1-openapi.yml: tagged paths POST /journey/task/list -> Journey",
+    "gbg-go-v1-openapi.yml: tagged paths POST /journey/task/list/schema -> Journey",
+    "gbg-go-v1-openapi.yml: tagged paths POST /journey/task/schema -> Journey",
+    "gbg-go-v1-openapi.yml: tagged paths POST /journey/task/update -> Journey",
+    "gbg-go-v1-openapi.yml: tagged paths POST /journey/state/fetch -> Journey",
+    "gbg-go-v1-openapi.yml: declared missing tag: As",
+    "gbg-go-v1-openapi.yml: declared missing tag: Journey",
+    "gbg-go-v2-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "gbg-go-v2-openapi.yml: declared missing tag: Authentication",
+    "gbg-go-v2-openapi.yml: declared missing tag: Device",
+    "gbg-go-v2-openapi.yml: declared missing tag: Interaction",
+    "gbg-go-v2-openapi.yml: declared missing tag: Journey",
+    "gbg-go-v2-openapi.yml: declared missing tag: Sandbox",
+    "tag 'Authentication' spans 2 source specs (gbg-go-v2-openapi.json, gbg-go-v2-openapi.yml): per-path servers applied",
+    "tag 'Device' spans 2 source specs (gbg-go-v2-openapi.json, gbg-go-v2-openapi.yml): per-path servers applied",
+    "tag 'Interaction' spans 2 source specs (gbg-go-v2-openapi.json, gbg-go-v2-openapi.yml): per-path servers applied",
+    "tag 'Journey' spans 3 source specs (gbg-go-v2-openapi.json, gbg-go-v1-openapi.yml, gbg-go-v2-openapi.yml): per-path servers applied",
+    "tag 'Sandbox' spans 2 source specs (gbg-go-v2-openapi.json, gbg-go-v2-openapi.yml): per-path servers applied",
+    "apis.yml register: written (+11 apis, 12 total)"
+  ],
+  "skipped": [
+    "_original/gbg-go-v1-openapi.json: archived document superseded by a larger archived document"
+  ]
+}

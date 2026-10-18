@@ -1,0 +1,13 @@
+generated: '2026-10-18'
+method: derived
+source: openapi/gbg-go-v1-openapi.yml, openapi/gbg-go-v2-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/gbg-go-v1-openapi.yml
+  - openapi/gbg-go-v2-openapi.yml

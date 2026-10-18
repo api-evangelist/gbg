@@ -1,0 +1,67 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://docs.go.gbgplc.com/docs/go-v1/release-note/release-note-home.md
+sources:
+- https://docs.go.gbgplc.com/docs/go-v1/release-note/release-note-home.md
+- https://docs.go.gbgplc.com/docs/go-v1/release-note/release-note.md
+- https://docs.go.gbgplc.com/docs/go-v1/release-note/release-note-assureid-choice.md
+- https://docs.go.gbgplc.com/docs/go-v1/release-note/release-note-assureid.md
+entries:
+- date: '2026-07-24'
+  highlights:
+  - Re-ordered the variants in each module's variant drop-down list into alphabetical order, making it quicker to find and select the variant
+    you need.
+  breaking: false
+- date: '2026-07-21'
+  highlights:
+  - Added an additional way to authorise session export in the Investigation Portal, so that export can be enabled for your organisation through
+    your access permissions.
+  breaking: false
+- date: '2026-07-16'
+  highlights:
+  - Added the option to delete selected personal data from a session in the Investigation Portal.
+  - Fixed an issue where the Publish to Production button stayed disabled for some journeys, preventing them from being published.
+  breaking: false
+- date: '2026-07-13'
+  highlights:
+  - Added new domain elements for Australian Birth Certificate and Marriage Certificate documents.
+  - Updated the Investigation Portal to show a Pass/Fail result rather than a score for the Biometrics Reverification variant.
+  - Fixed an issue where some journey events did not appear in the Investigation Portal.
+  - Fixed an issue where Hosted journeys couldn't be completed when verifying a US address.
+  breaking: false
+- date: '2026-06-16'
+  highlights:
+  - Added audit logging for cross-organisation access decisions in partner and sub-organisation journeys.
+  breaking: false
+- date: '2026-06-02'
+  highlights:
+  - Fixed an issue in the Investigation Portal where Document, Biometrics Liveness, and FaceMatch modules failed to display their images and result
+    data.
+  - Fixed an issue where the Export button in report views was greyed out and unselectable, preventing users from downloading reports as PDF.
+  breaking: false
+- date: '2026-06-01'
+  highlights:
+  - Added the ability to classify evaluation outcomes as Positive, Negative, or Neutral directly in the Journey Builder.
+  - Added Investigation audit logs to the Journey Builder Audit log page through a new tabbed view.
+  - Fixed an issue where biometric images supplied at journey start were lost during document processing.
+  - Fixed an issue in the Journey builder where switching between two placed modules could cause a module's sidebar to revert to its default variant.
+  breaking: false
+- date: '2026-04-06'
+  highlights:
+  - Added Document Attachments module for supporting document collection.
+  - Added PEP and Sanctions Standard OGM Push variant, enabling automated push of individual records for continuous compliance screening.
+  - Improved PEP and Sanctions module screening with extensive configuration options.
+  breaking: false
+- date: '2026-03-21'
+  highlights:
+  - Fixed issue where journeys without existing drafts could not be updated or modified, causing silent backend errors with no user-facing feedback.
+  breaking: false
+- date: '2026-03-12'
+  highlights:
+  - The releases for March 12th, 2026 focus on Investigation Portal accuracy.
+  breaking: false
+scheme: date-based
+note: Based on GBG Go release notes page. The page shows date-based releases with no explicit version numbers. The most recent entry is July 24th,
+  2026.
+docs: https://docs.go.gbgplc.com/docs/go-v1/release-note/release-note.md

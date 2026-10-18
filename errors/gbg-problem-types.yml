@@ -1,0 +1,48 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.go.gbgplc.com/docs/go-v2/api-reference/api-errors
+format: custom
+envelope:
+  field: errors
+  type: array
+problems:
+- status: 400
+  title: Bad Request
+  type: MISSING_FIELD
+  description: A required field is missing
+  remediation: Check request body and include all required fields
+- status: 401
+  title: Unauthorized
+  type: UNAUTHORIZED
+  description: No valid authentication token, or the token has expired
+  remediation: Include a valid Bearer token in Authorization header or generate new token
+- status: 403
+  title: Forbidden
+  type: FORBIDDEN
+  description: No permission for the requested resource
+  remediation: Check account permissions with administrator
+- status: 404
+  title: Not Found
+  type: NOT_FOUND
+  description: The requested resource does not exist
+  remediation: Verify endpoint URL and resource identifiers
+- status: 409
+  title: Conflict
+  type: INVALID_FIELD
+  description: A field conflicts with the current state
+  remediation: Check field values against current resource state
+- status: 422
+  title: Unprocessable Entity
+  type: UNPROCESSABLE_ENTITY
+  description: The request body could not be processed
+  remediation: Validate request body format and content
+- status: 500
+  title: Internal Server Error
+  type: UNKNOWN
+  description: An unexpected internal error occurred
+  remediation: Retry request, contact support if persistent
+- status: 503
+  title: Service Unavailable
+  type: SERVICE_UNAVAILABLE
+  description: The service is temporarily unavailable
+  remediation: Wait and retry, check service status

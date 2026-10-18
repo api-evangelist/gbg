@@ -1,0 +1,384 @@
+{
+  "@context": {
+    "@vocab": "https://gbgplc.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "gbg": "https://gbgplc.com/schema#",
+    "JourneyStartResponse": "gbg:JourneyStartResponse",
+    "instanceId": {
+      "@id": "gbg:instanceId",
+      "@type": "xsd:string"
+    },
+    "instanceUrl": {
+      "@id": "gbg:instanceUrl",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "gbg:status",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "gbg:message",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "gbg:state",
+      "@type": "@id"
+    },
+    "StateFetchResponse": "gbg:StateFetchResponse",
+    "context": {
+      "@id": "gbg:context"
+    },
+    "result": {
+      "@id": "gbg:result"
+    },
+    "ErrorResponse": "gbg:ErrorResponse",
+    "errors": {
+      "@id": "gbg:errors",
+      "@container": "@list"
+    },
+    "GbgError": "gbg:GbgError",
+    "code": {
+      "@id": "gbg:code",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "gbg:name",
+      "@type": "xsd:string"
+    },
+    "problem": {
+      "@id": "gbg:problem",
+      "@type": "xsd:string"
+    },
+    "action": {
+      "@id": "gbg:action",
+      "@type": "xsd:string"
+    },
+    "location": {
+      "@id": "gbg:location",
+      "@type": "xsd:string"
+    },
+    "InteractionFetchResponse": "gbg:InteractionFetchResponse",
+    "interactionId": {
+      "@id": "gbg:interactionId",
+      "@type": "xsd:string"
+    },
+    "journey": {
+      "@id": "gbg:journey"
+    },
+    "interaction": {
+      "@id": "gbg:interaction"
+    },
+    "instructions": {
+      "@id": "gbg:instructions"
+    },
+    "outstanding": {
+      "@id": "gbg:outstanding"
+    },
+    "outstandingGroups": {
+      "@id": "gbg:outstandingGroups",
+      "@container": "@list"
+    },
+    "processing": {
+      "@id": "gbg:processing",
+      "@type": "xsd:boolean"
+    },
+    "joinedDevice": {
+      "@id": "gbg:joinedDevice"
+    },
+    "SlimInteractionFetchResponse": "gbg:SlimInteractionFetchResponse",
+    "SlimResult": "gbg:SlimResult",
+    "outcome": {
+      "@id": "gbg:outcome",
+      "@type": "xsd:string"
+    },
+    "outcomeClassification": {
+      "@id": "gbg:outcomeClassification",
+      "@type": "xsd:string"
+    },
+    "data": {
+      "@id": "gbg:data",
+      "@type": "@id"
+    },
+    "SlimVerifiedData": "gbg:SlimVerifiedData",
+    "identity": {
+      "@id": "gbg:identity",
+      "@type": "@id"
+    },
+    "documents": {
+      "@id": "gbg:documents",
+      "@container": "@list"
+    },
+    "SlimIdentity": "gbg:SlimIdentity",
+    "title": {
+      "@id": "gbg:title",
+      "@type": "xsd:string"
+    },
+    "firstName": {
+      "@id": "gbg:firstName",
+      "@type": "xsd:string"
+    },
+    "middleNames": {
+      "@id": "gbg:middleNames",
+      "@container": "@list"
+    },
+    "lastNames": {
+      "@id": "gbg:lastNames",
+      "@container": "@list"
+    },
+    "lastNamesAtBirth": {
+      "@id": "gbg:lastNamesAtBirth",
+      "@container": "@list"
+    },
+    "dateOfBirth": {
+      "@id": "gbg:dateOfBirth",
+      "@type": "xsd:string"
+    },
+    "gender": {
+      "@id": "gbg:gender",
+      "@type": "xsd:string"
+    },
+    "currentAddress": {
+      "@id": "gbg:currentAddress"
+    },
+    "placeOfBirth": {
+      "@id": "gbg:placeOfBirth"
+    },
+    "idNumbers": {
+      "@id": "gbg:idNumbers",
+      "@container": "@list"
+    },
+    "SlimDocument": "gbg:SlimDocument",
+    "type": {
+      "@id": "gbg:type",
+      "@type": "xsd:string"
+    },
+    "category": {
+      "@id": "gbg:category",
+      "@type": "xsd:string"
+    },
+    "subType": {
+      "@id": "gbg:subType",
+      "@type": "xsd:string"
+    },
+    "format": {
+      "@id": "gbg:format",
+      "@type": "xsd:string"
+    },
+    "number": {
+      "@id": "gbg:number",
+      "@type": "xsd:string"
+    },
+    "issueDate": {
+      "@id": "gbg:issueDate",
+      "@type": "xsd:string"
+    },
+    "expiryDate": {
+      "@id": "gbg:expiryDate",
+      "@type": "xsd:string"
+    },
+    "country": {
+      "@id": "gbg:country",
+      "@type": "xsd:string"
+    },
+    "classification": {
+      "@id": "gbg:classification"
+    },
+    "extraction": {
+      "@id": "gbg:extraction",
+      "@type": "@id"
+    },
+    "validation": {
+      "@id": "gbg:validation",
+      "@type": "@id"
+    },
+    "SlimExtraction": "gbg:SlimExtraction",
+    "aggregatedFields": {
+      "@id": "gbg:aggregatedFields",
+      "@container": "@list"
+    },
+    "extractedFields": {
+      "@id": "gbg:extractedFields",
+      "@container": "@list"
+    },
+    "SlimValidation": "gbg:SlimValidation",
+    "validationChecks": {
+      "@id": "gbg:validationChecks",
+      "@container": "@list"
+    },
+    "aggregatedValidationChecks": {
+      "@id": "gbg:aggregatedValidationChecks",
+      "@container": "@list"
+    },
+    "InteractionSubmitResponse": "gbg:InteractionSubmitResponse",
+    "HandoffTokenResponse": "gbg:HandoffTokenResponse",
+    "devicePosition": {
+      "@id": "gbg:devicePosition",
+      "@type": "xsd:string"
+    },
+    "expiresIn": {
+      "@id": "gbg:expiresIn",
+      "@type": "xsd:decimal"
+    },
+    "LoqateSearchResponse": "gbg:LoqateSearchResponse",
+    "Items": {
+      "@id": "gbg:Items",
+      "@container": "@list"
+    },
+    "LoqateRetrieveResponse": "gbg:LoqateRetrieveResponse",
+    "SlimStateFetchResponse": "gbg:SlimStateFetchResponse",
+    "steps": {
+      "@id": "gbg:steps",
+      "@container": "@list"
+    },
+    "SlimJourney": "gbg:SlimJourney",
+    "id": {
+      "@id": "gbg:id",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "gbg:version",
+      "@type": "xsd:string"
+    },
+    "startedAt": {
+      "@id": "gbg:startedAt",
+      "@type": "xsd:string"
+    },
+    "endedAt": {
+      "@id": "gbg:endedAt",
+      "@type": "xsd:string"
+    },
+    "SlimStep": "gbg:SlimStep",
+    "nodeId": {
+      "@id": "gbg:nodeId",
+      "@type": "xsd:string"
+    },
+    "SchemaFetchResponse": "gbg:SchemaFetchResponse",
+    "deliveryId": {
+      "@id": "gbg:deliveryId",
+      "@type": "xsd:string"
+    },
+    "resolvedVersion": {
+      "@id": "gbg:resolvedVersion",
+      "@type": "xsd:string"
+    },
+    "schemas": {
+      "@id": "gbg:schemas",
+      "@container": "@list"
+    },
+    "TerminateResponse": "gbg:TerminateResponse",
+    "DeleteResponse": "gbg:DeleteResponse",
+    "DeviceStartResponse": "gbg:DeviceStartResponse",
+    "connectToken": {
+      "@id": "gbg:connectToken",
+      "@type": "xsd:string"
+    },
+    "tokenType": {
+      "@id": "gbg:tokenType",
+      "@type": "xsd:string"
+    },
+    "scope": {
+      "@id": "gbg:scope",
+      "@container": "@list"
+    },
+    "DeviceConnectResponse": "gbg:DeviceConnectResponse",
+    "endUserToken": {
+      "@id": "gbg:endUserToken",
+      "@type": "xsd:string"
+    },
+    "resumeCredential": {
+      "@id": "gbg:resumeCredential",
+      "@type": "xsd:string"
+    },
+    "credentialExpiresAt": {
+      "@id": "gbg:credentialExpiresAt",
+      "@type": "xsd:string"
+    },
+    "credentialExpiresIn": {
+      "@id": "gbg:credentialExpiresIn",
+      "@type": "xsd:decimal"
+    },
+    "DeviceRefreshResponse": "gbg:DeviceRefreshResponse",
+    "linkExpiresAt": {
+      "@id": "gbg:linkExpiresAt",
+      "@type": "xsd:string"
+    },
+    "DeviceValidateResponse": "gbg:DeviceValidateResponse",
+    "valid": {
+      "@id": "gbg:valid",
+      "@type": "xsd:boolean"
+    },
+    "sessionId": {
+      "@id": "gbg:sessionId",
+      "@type": "xsd:string"
+    },
+    "orgId": {
+      "@id": "gbg:orgId",
+      "@type": "xsd:string"
+    },
+    "expiresAt": {
+      "@id": "gbg:expiresAt",
+      "@type": "xsd:string"
+    },
+    "SandboxScenarioWritten": "gbg:SandboxScenarioWritten",
+    "journeyId": {
+      "@id": "gbg:journeyId",
+      "@type": "xsd:string"
+    },
+    "tier": {
+      "@id": "gbg:tier",
+      "@type": "xsd:string"
+    },
+    "CreateSandboxScenarioRequest": "gbg:CreateSandboxScenarioRequest",
+    "SandboxScenarioSummary": "gbg:SandboxScenarioSummary",
+    "editable": {
+      "@id": "gbg:editable",
+      "@type": "xsd:boolean"
+    },
+    "description": {
+      "@id": "gbg:description",
+      "@type": "xsd:string"
+    },
+    "lastModifiedTime": {
+      "@id": "gbg:lastModifiedTime",
+      "@type": "xsd:dateTime"
+    },
+    "lastModifiedBy": {
+      "@id": "gbg:lastModifiedBy",
+      "@type": "xsd:string"
+    },
+    "SandboxScenario": "gbg:SandboxScenario",
+    "UpdateSandboxScenarioRequest": "gbg:UpdateSandboxScenarioRequest",
+    "PasswordGrantRequest": "gbg:PasswordGrantRequest",
+    "client_id": {
+      "@id": "gbg:client_id",
+      "@type": "xsd:string"
+    },
+    "client_secret": {
+      "@id": "gbg:client_secret",
+      "@type": "xsd:string"
+    },
+    "username": {
+      "@id": "gbg:username",
+      "@type": "xsd:string"
+    },
+    "password": {
+      "@id": "gbg:password",
+      "@type": "xsd:string"
+    },
+    "grant_type": {
+      "@id": "gbg:grant_type",
+      "@type": "xsd:string"
+    },
+    "ClientCredentialsGrantRequest": "gbg:ClientCredentialsGrantRequest"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "GBG API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects GBG's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-18) from openapi/gbg-go-v1-openapi.yml, openapi/gbg-go-v2-openapi.yml.",
+  "dcterms:created": "2026-10-18",
+  "dcterms:source": [
+    "openapi/gbg-go-v1-openapi.yml",
+    "openapi/gbg-go-v2-openapi.yml"
+  ]
+}

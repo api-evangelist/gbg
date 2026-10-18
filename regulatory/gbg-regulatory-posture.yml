@@ -1,0 +1,95 @@
+generated: '2026-10-18'
+method: searched
+source:
+- https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+- https://www.gbgplc.com/legal-and-regulatory/products-services-privacy-policy/
+- https://www.gbgplc.com/legal-and-regulatory/accessibility-statement/
+signals:
+  data_subject_request:
+    url: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+    section: Your Privacy Rights
+    channel: privacy.rights@gbg.com
+    stated_sla: one calendar month (45 days for US residents depending on state)
+    evidence:
+    - source: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "GBG will fulfil all data subjects’ rights requests in line with applicable data protection law."
+    - source: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "We usually have one calendar month to respond, but this may vary depending on your location (for example, if you are in the US we have 45 days depending on your state of residence). If we are unable to comply with your request, we will provide you with an explanation."
+    - source: https://www.gbgplc.com/legal-and-regulatory/products-services-privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "If you have any questions or requests in connection with this Products and Services Privacy Policy, please use this form or send an email to privacy.rights@gbg.com ."
+    note: >-
+      Both the general and the products/services privacy policies commit to fulfilling data-subject rights
+      requests, name an email channel, and state a one-month (US: 45-day) response window.
+  exit_assistance:
+    url: https://www.gbgplc.com/legal-and-regulatory/products-services-privacy-policy/
+    section: Your Privacy Rights
+    evidence:
+    - source: https://www.gbgplc.com/legal-and-regulatory/products-services-privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "The right to data portability – you can request that the personal data you have provided to us be ported to another organisation, or be provided to you (to the extent technically feasible) in a readily useable format that allows you to transmit it yourself."
+    note: >-
+      Individual data-portability right only (privacy-law right, "to the extent technically feasible");
+      no customer-level contractual exit/switching assistance was found on these pages.
+  data_retention:
+    url: https://www.gbgplc.com/legal-and-regulatory/products-services-privacy-policy/
+    section: How long do we retain your data for in our Products and Services?
+    evidence:
+    - source: https://www.gbgplc.com/legal-and-regulatory/products-services-privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "We retain personal data we collect from you, our customers and data suppliers for the length of time necessary to fulfil the specific purpose or purposes for which it has been collected (for example, to provide our customers with a service you have requested or for our customers to comply with applicable legal requirements, such as anti-money laundering), or for the duration that is set by our customers, which we do not control."
+    - source: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "You have been identified as a ‘lead’. If there is no interaction, we will delete this record after 6 months."
+    note: >-
+      Product data is retained for purpose or for a customer-set duration (GBG acting for its customers);
+      the general (website/business) policy carries a purpose-by-period retention table, e.g. 6 months for
+      prospecting leads.
+  data_residency:
+    url: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+    section: Cross Border Transfers
+    evidence:
+    - source: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "Your personal data may be transferred to, and processed in, countries other than the country in which you are resident. These countries may have data protection laws that are different to the laws of your country."
+    - source: https://www.gbgplc.com/legal-and-regulatory/products-services-privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "Where appropriate, these include implementing the European Commission’s Standard Contractual Clauses and the UK International Data Transfer Agreement for international data transfers between our group companies, which require all group companies to protect UK and EEA personal data in accordance with UK and European Union data protection law."
+    note: >-
+      No in-region residency commitment: GBG states data may be processed outside the subject's country,
+      relying on EU SCCs and the UK IDTA as transfer safeguards.
+  age_assurance:
+    url: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+    section: Children's Personal Information
+    evidence:
+    - source: https://www.gbgplc.com/legal-and-regulatory/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "We do not sell, nor do we have actual knowledge that we sell personal information of consumers under 16 years of age or that we share personal information of consumers under 16 years for cross-context behavioural advertising."
+    note: >-
+      A children's-data statement (no sale/sharing of under-16 data, deletion on notice), not an age-assurance
+      mechanism for GBG's own services.
+  accessibility_conformance:
+    url: https://www.gbgplc.com/legal-and-regulatory/accessibility-statement/
+    section: Conformance status
+    contact: accessibility@gbgplc.com
+    evidence:
+    - source: https://www.gbgplc.com/legal-and-regulatory/accessibility-statement/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "GBG's digital products are partially conformant with WCAG 2.1 level AA, which means that some parts of the content do not fully conform to the accessibility standard."
+    - source: https://www.gbgplc.com/legal-and-regulatory/accessibility-statement/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: "We aim to respond to feedback within 5 business days."
+    note: Self-declared partial conformance with WCAG 2.1 AA, with a feedback channel and response target.

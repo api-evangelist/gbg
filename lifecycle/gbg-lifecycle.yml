@@ -1,0 +1,7 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.go.gbgplc.com/docs/go-v2/migration/v1-to-v2-migration-guide
+versioning: major-versioned
+deprecation: version-based
+status_page: null
+note: GBG Go has v1 and v2 APIs with migration guide. v2 is in early access with limited availability. Some v1 modules not supported in v2.

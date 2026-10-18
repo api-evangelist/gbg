@@ -1,0 +1,64 @@
+name: GBG Go Documentation MCP Server
+type: MCPServer
+generated: '2026-10-18'
+method: probed
+source: https://docs.go.gbgplc.com/docs/go-v2/get-started/ai-agent-integration.md
+status: live
+scope: documentation
+description: >-
+  GBG publishes a remote MCP server for the GBG Go documentation (Mintlify-hosted docs site). It lets
+  MCP clients search the docs and read page/OpenAPI content. It is a DOCUMENTATION server: it does not
+  call the GBG Go journey API (no tool starts journeys or submits verification data). Probed 2026-10-18:
+  POST initialize -> 200 text/event-stream, serverInfo {name: "GBG Documentation", version: "1.0.0"},
+  protocolVersion 2025-03-26; tools/list -> 200 with three tools, no credentials required.
+deployment:
+  mode: remote
+  endpoint: https://docs.go.gbgplc.com/mcp
+  transport: streamable-http
+  auth: none
+  verified: probed
+server_info:
+  name: GBG Documentation
+  version: 1.0.0
+  protocol_version: '2025-03-26'
+  capabilities: [tools, resources]
+documented_tools:
+  note: >-
+    The provider's docs page describes two tools by display name ("Search" and "Get page"). The live
+    tools/list returned the three names below; recorded as returned.
+  names: [Search, Get page]
+  evidence_url: https://docs.go.gbgplc.com/docs/go-v2/get-started/ai-agent-integration.md
+tools:
+  - name: search_gbg_documentation
+    description: Search across the GBG Documentation knowledge base to find relevant information, code examples, API references, and guides.
+    inputSchema:
+      type: object
+      properties:
+        query: {type: string, description: Search query}
+        version: {type: string, description: "Filter to specific version (e.g., 'v0.7')"}
+      required: [query]
+    verified: probed
+  - name: query_docs_filesystem_gbg_documentation
+    description: Run a read-only shell-like query against a virtualized, in-memory filesystem containing only the GBG documentation pages and OpenAPI specs.
+    inputSchema:
+      type: object
+      properties:
+        command: {type: string, description: "A shell command to run against the virtualized documentation filesystem (e.g., rg -il \"keyword\" /)."}
+      required: [command]
+    verified: probed
+  - name: submit_feedback
+    description: Report a problem with a documentation page so the docs team can fix it.
+    inputSchema:
+      type: object
+      properties:
+        path: {type: string, description: URL path of the documentation page the feedback is about}
+        feedback: {type: string, description: Description of the documentation issue}
+      required: [path, feedback]
+    verified: probed
+client_config:
+  claude_code: claude mcp add --transport http gbg-go-docs https://docs.go.gbgplc.com/mcp
+  cursor: {mcpServers: {gbg-go-docs: {url: https://docs.go.gbgplc.com/mcp}}}
+related:
+  llms_txt: https://docs.go.gbgplc.com/llms.txt
+  agent_skill: https://docs.go.gbgplc.com/.well-known/agent-skills/gbg/skill.md
+  skills_install: npx skills add https://docs.go.gbgplc.com/

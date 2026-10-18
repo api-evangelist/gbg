@@ -1,0 +1,131 @@
+openapi: 3.2.0
+info:
+  title: Gbg Authentication API
+  version: 2.0.0
+  license:
+    name: MIT
+  description: 'Operations tagged Authentication across 2 of this provider''s published API definitions: gbg-go-v2-openapi.json, gbg-go-v2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eu.platform.go.gbgplc.com/v2/captain/
+- url: https://us.platform.go.gbgplc.com/v2/captain/
+- url: https://au.platform.go.gbgplc.com/v2/captain/
+- url: https://api.auth.gbgplc.com/as/token.oauth2
+security: []
+tags:
+- name: Authentication
+paths:
+  /as/token.oauth2:
+    post:
+      summary: Generate access token
+      description: Get an access token to authenticate API requests. If you're unfamiliar with the authentication process, check out the authentication guide for more details.
+      security: []
+      servers:
+      - url: https://api.auth.gbgplc.com
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/ClientCredentialsGrantRequest'
+              - $ref: '#/components/schemas/PasswordGrantRequest'
+              discriminator:
+                propertyName: grant_type
+                mapping:
+                  client_credentials: '#/components/schemas/ClientCredentialsGrantRequest'
+                  password: '#/components/schemas/PasswordGrantRequest'
+      responses:
+        '200':
+          description: Successfully retrieved access token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: The access token used for authentication.
+                  expires_in:
+                    type: integer
+                    description: Token expiration time in seconds.
+                  token_type:
+                    type: string
+                    description: The type of token, usually 'Bearer'.
+        '400':
+          description: Invalid request. Check your credentials.
+        '401':
+          description: Unauthorized request. Invalid client or user credentials.
+      tags:
+      - Authentication
+      operationId: postAsTokenOauth2
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+components:
+  schemas:
+    PasswordGrantRequest:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: The client ID assigned to your organization.
+        client_secret:
+          type: string
+          description: The client secret assigned to your organization.
+        username:
+          type: string
+          description: The username for API authentication.
+        password:
+          type: string
+          description: The password for API authentication.
+        grant_type:
+          type: string
+          enum:
+          - password
+          description: Must always be set to 'password'.
+      required:
+      - client_id
+      - client_secret
+      - username
+      - password
+      - grant_type
+    ClientCredentialsGrantRequest:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: The client ID assigned to your organization.
+        client_secret:
+          type: string
+          description: The client secret assigned to your organization.
+        grant_type:
+          type: string
+          enum:
+          - client_credentials
+          description: Must always be set to 'client_credentials'.
+        scope:
+          type: string
+          enum:
+          - gbg.token
+          description: Must always be set to 'gbg.token'.
+      required:
+      - client_id
+      - client_secret
+      - grant_type
+      - scope
+  securitySchemes:
+    CustomerAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Customer JWT token for journey lifecycle operations. Required for: journey/start, journey/state/fetch, device/start'
+    InteractionAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'End-User JWT token for end-user scoped operations. Required for: interaction/fetch, interaction/submit, device/validate'
+x-refined-from:
+- gbg-go-v2-openapi.json
+- gbg-go-v2-openapi.yml

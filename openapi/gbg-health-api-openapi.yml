@@ -1,0 +1,84 @@
+openapi: 3.2.0
+info:
+  title: GBG GO Next Gen Flow Captain Health API
+  version: 1.0.0
+  description: API for Customers and End Users to interact with the GBG GO Next Gen Flow Captain
+  contact:
+    name: GBG GO Next Generation Flow Captain API Team
+    url: https://gbgplc.com
+    email: customer.support@gbg.com
+servers:
+- url: https://eu.platform.go.gbgplc.com/v2/captain
+- url: https://us.platform.go.gbgplc.com/v2/captain
+- url: https://au.platform.go.gbgplc.com/v2/captain
+tags:
+- name: Health
+paths:
+  /journey/health:
+    get:
+      operationId: health
+      summary: Obtain the flow-captain health status
+      tags:
+      - Health
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                additionalProperties: true
+              example:
+                message: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json: {}
+        '403':
+          description: Forbidden
+          content:
+            application/json: {}
+        '404':
+          description: Not Found
+          content:
+            application/json: {}
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json: {}
+        '503':
+          description: Service Unavailable
+          content:
+            application/json: {}
+components:
+  securitySchemes:
+    CustomerAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    DeviceConnect:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    PingID:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    InteractionAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

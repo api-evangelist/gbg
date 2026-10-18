@@ -1,0 +1,36 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.go.gbgplc.com/docs/go-v2/developer-integration/sdks/overview
+packages:
+- name: '@gbg/go-core'
+  registry: npm
+  url: https://www.npmjs.com/package/@gbg/go-core
+  language: typescript
+  official: true
+  version: '0.1.3'
+  published: '2026-09-16'
+  note: Core TypeScript SDK for GBG Go API, provides type-safe client for server-side integrations
+- name: 'GBGBridge'
+  registry: swiftpm
+  url: https://docs.go.gbgplc.com/docs/go-v2/developer-integration/sdks/ios-sdk
+  language: swift
+  official: true
+  version: null
+  published: null
+  note: iOS Bridge SDK for embedding web-based identity journeys in native iOS apps, distributed via Swift Package Manager
+- name: 'gbg-go-android-sdk'
+  registry: maven
+  url: https://docs.go.gbgplc.com/docs/go-v2/developer-integration/sdks/android-sdk
+  language: java
+  official: true
+  version: null
+  published: null
+  note: Android Bridge SDK for embedding web-based identity journeys in native Android apps
+- name: 'gbg-go-web-bridge'
+  registry: cdn
+  url: https://docs.go.gbgplc.com/docs/go-v2/developer-integration/sdks/web-sdk
+  language: javascript
+  official: true
+  version: null
+  published: null
+  note: Web Bridge SDK for embedding web-based identity journeys in web applications

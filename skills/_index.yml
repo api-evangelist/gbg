@@ -1,0 +1,18 @@
+name: GBG agent skills
+generated: '2026-10-18'
+method: searched
+source: https://docs.go.gbgplc.com/.well-known/agent-skills/index.json
+description: >-
+  GBG publishes one agent skill for GBG Go through its docs site (agentskills.io discovery index,
+  also installable with `npx skills add https://docs.go.gbgplc.com/`). It is saved verbatim under
+  skills/published/. No operation-grounded skills were generated: the GBG Go OpenAPI specs in openapi/
+  declare no operationIds, so a skill's operations[] could not name real ones. The operationIds proposed
+  in overlays/gbg-go-v1-overlay.yaml and overlays/gbg-go-v2-overlay.yaml would ground them once applied.
+skills:
+  - file: skills/published/gbg-skill.md
+    name: GBG
+    published: true
+    url: https://docs.go.gbgplc.com/.well-known/agent-skills/gbg/skill.md
+    digest: sha256:801dd1bcd2533d1d04042af86f3adb6b76fbc9635d79cc605c4b4ae18a211330
+    http_status: 200
+    operations: []

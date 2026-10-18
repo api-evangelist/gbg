@@ -1,0 +1,527 @@
+generated: '2026-10-18'
+method: probed
+generator: harvest-well-known.py
+source: Live GET of the named /.well-known/ path list on every host the record knows; every row is a request that
+  was issued.
+summary:
+  hosts_probed: 12
+  paths_probed: 132
+  documents_served: 1
+hosts:
+- host: eu.platform.go.gbgplc.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 404
+    standard: OpenID Connect Discovery 1.0
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    standard: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    standard: RFC 9728
+  - path: /.well-known/api-catalog
+    status: 404
+    standard: RFC 9727
+  - path: /.well-known/apis.json
+    status: 404
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 404
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 404
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 404
+    standard: MCP server card
+- host: id3global.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 200
+    standard: OpenID Connect Discovery 1.0
+    note: '200 carrying an HTML/SPA shell: not a document'
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    standard: RFC 8414
+    note: '200 carrying an HTML/SPA shell: not a document'
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    standard: RFC 9728
+    note: '200 carrying an HTML/SPA shell: not a document'
+  - path: /.well-known/api-catalog
+    status: 200
+    standard: RFC 9727
+    note: '200 carrying an HTML/SPA shell: not a document'
+  - path: /.well-known/apis.json
+    status: 404
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 404
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 404
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 404
+    standard: MCP server card
+- host: docs.go.gbgplc.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 404
+    standard: OpenID Connect Discovery 1.0
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    standard: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    standard: RFC 9728
+  - path: /.well-known/api-catalog
+    status: 404
+    standard: RFC 9727
+  - path: /.well-known/apis.json
+    status: 404
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 404
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 404
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 404
+    standard: MCP server card
+- host: www.id3global.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 200
+    standard: OpenID Connect Discovery 1.0
+    note: '200 carrying an HTML/SPA shell: not a document'
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    standard: RFC 8414
+    note: '200 carrying an HTML/SPA shell: not a document'
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    standard: RFC 9728
+    note: '200 carrying an HTML/SPA shell: not a document'
+  - path: /.well-known/api-catalog
+    status: 200
+    standard: RFC 9727
+    note: '200 carrying an HTML/SPA shell: not a document'
+  - path: /.well-known/apis.json
+    status: 404
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 404
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 404
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 404
+    standard: MCP server card
+- host: www.gbg.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 404
+    standard: OpenID Connect Discovery 1.0
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    standard: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    standard: RFC 9728
+  - path: /.well-known/api-catalog
+    status: 404
+    standard: RFC 9727
+  - path: /.well-known/apis.json
+    status: 404
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 404
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 404
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 404
+    standard: MCP server card
+- host: www.gbgplc.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 404
+    standard: OpenID Connect Discovery 1.0
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    standard: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    standard: RFC 9728
+  - path: /.well-known/api-catalog
+    status: 404
+    standard: RFC 9727
+  - path: /.well-known/apis.json
+    status: 404
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 404
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 404
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 404
+    standard: MCP server card
+- host: gbgplc.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 404
+    standard: OpenID Connect Discovery 1.0
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    standard: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    standard: RFC 9728
+  - path: /.well-known/api-catalog
+    status: 404
+    standard: RFC 9727
+  - path: /.well-known/apis.json
+    status: 404
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 404
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 404
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 404
+    standard: MCP server card
+- host: api.gbg.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: null
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: null
+    standard: RFC 9116
+    note: 'unreachable: URLError'
+  - path: /.well-known/openid-configuration
+    status: null
+    standard: OpenID Connect Discovery 1.0
+    note: 'unreachable: URLError'
+  - path: /.well-known/oauth-authorization-server
+    status: null
+    standard: RFC 8414
+    note: 'unreachable: URLError'
+  - path: /.well-known/oauth-protected-resource
+    status: null
+    standard: RFC 9728
+    note: 'unreachable: URLError'
+  - path: /.well-known/api-catalog
+    status: null
+    standard: RFC 9727
+    note: 'unreachable: URLError'
+  - path: /.well-known/apis.json
+    status: null
+    standard: APIs.json
+    note: 'unreachable: URLError'
+  - path: /.well-known/ai-plugin.json
+    status: null
+    standard: OpenAI plugin manifest
+    note: 'unreachable: URLError'
+  - path: /.well-known/aauth-resource.json
+    status: null
+    standard: AAuth
+    note: 'unreachable: URLError'
+  - path: /.well-known/ucp.json
+    status: null
+    standard: UCP
+    note: 'unreachable: URLError'
+  - path: /.well-known/acp.json
+    status: null
+    standard: ACP
+    note: 'unreachable: URLError'
+  - path: /.well-known/mcp/server-card.json
+    status: null
+    standard: MCP server card
+    note: 'unreachable: URLError'
+- host: api.gbgplc.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: null
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: null
+    standard: RFC 9116
+    note: 'unreachable: URLError'
+  - path: /.well-known/openid-configuration
+    status: null
+    standard: OpenID Connect Discovery 1.0
+    note: 'unreachable: URLError'
+  - path: /.well-known/oauth-authorization-server
+    status: null
+    standard: RFC 8414
+    note: 'unreachable: URLError'
+  - path: /.well-known/oauth-protected-resource
+    status: null
+    standard: RFC 9728
+    note: 'unreachable: URLError'
+  - path: /.well-known/api-catalog
+    status: null
+    standard: RFC 9727
+    note: 'unreachable: URLError'
+  - path: /.well-known/apis.json
+    status: null
+    standard: APIs.json
+    note: 'unreachable: URLError'
+  - path: /.well-known/ai-plugin.json
+    status: null
+    standard: OpenAI plugin manifest
+    note: 'unreachable: URLError'
+  - path: /.well-known/aauth-resource.json
+    status: null
+    standard: AAuth
+    note: 'unreachable: URLError'
+  - path: /.well-known/ucp.json
+    status: null
+    standard: UCP
+    note: 'unreachable: URLError'
+  - path: /.well-known/acp.json
+    status: null
+    standard: ACP
+    note: 'unreachable: URLError'
+  - path: /.well-known/mcp/server-card.json
+    status: null
+    standard: MCP server card
+    note: 'unreachable: URLError'
+- host: investigate.gbgplc.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 403
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 403
+    standard: OpenID Connect Discovery 1.0
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    standard: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+    standard: RFC 9728
+  - path: /.well-known/api-catalog
+    status: 403
+    standard: RFC 9727
+  - path: /.well-known/apis.json
+    status: 403
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 403
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 403
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 403
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 403
+    standard: MCP server card
+- host: secureandtrusted.gbgplc.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    standard: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 200
+    standard: OpenID Connect Discovery 1.0
+    note: '200 but issued by app.safebase.io: the hosting platform''s document, not the provider''s'
+    platform_issuer: app.safebase.io
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    standard: RFC 8414
+    note: '200 but issued by app.safebase.io: the hosting platform''s document, not the provider''s'
+    platform_issuer: app.safebase.io
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    standard: RFC 9728
+    content_type: application/json; charset=utf-8
+    file: gbg-secureandtrusted-oauth-protected-resource.json
+    platform_authorization_servers:
+    - app.safebase.io
+  - path: /.well-known/api-catalog
+    status: 404
+    standard: RFC 9727
+  - path: /.well-known/apis.json
+    status: 404
+    standard: APIs.json
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    standard: OpenAI plugin manifest
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    standard: AAuth
+  - path: /.well-known/ucp.json
+    status: 404
+    standard: UCP
+  - path: /.well-known/acp.json
+    status: 404
+    standard: ACP
+  - path: /.well-known/mcp/server-card.json
+    status: 404
+    standard: MCP server card
+- host: sso.gbgplc.com
+  control:
+    path: /.well-known/apis-io-negative-control-7f3ab91c.json
+    status: null
+    bytes: 0
+  documents:
+  - path: /.well-known/security.txt
+    status: null
+    standard: RFC 9116
+    note: 'unreachable: URLError'
+  - path: /.well-known/openid-configuration
+    status: null
+    standard: OpenID Connect Discovery 1.0
+    note: 'unreachable: URLError'
+  - path: /.well-known/oauth-authorization-server
+    status: null
+    standard: RFC 8414
+    note: 'unreachable: URLError'
+  - path: /.well-known/oauth-protected-resource
+    status: null
+    standard: RFC 9728
+    note: 'unreachable: URLError'
+  - path: /.well-known/api-catalog
+    status: null
+    standard: RFC 9727
+    note: 'unreachable: URLError'
+  - path: /.well-known/apis.json
+    status: null
+    standard: APIs.json
+    note: 'unreachable: URLError'
+  - path: /.well-known/ai-plugin.json
+    status: null
+    standard: OpenAI plugin manifest
+    note: 'unreachable: URLError'
+  - path: /.well-known/aauth-resource.json
+    status: null
+    standard: AAuth
+    note: 'unreachable: URLError'
+  - path: /.well-known/ucp.json
+    status: null
+    standard: UCP
+    note: 'unreachable: URLError'
+  - path: /.well-known/acp.json
+    status: null
+    standard: ACP
+    note: 'unreachable: URLError'
+  - path: /.well-known/mcp/server-card.json
+    status: null
+    standard: MCP server card
+    note: 'unreachable: URLError'

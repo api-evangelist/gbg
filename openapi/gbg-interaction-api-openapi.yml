@@ -1,0 +1,3531 @@
+openapi: 3.2.0
+info:
+  title: Gbg Interaction API
+  version: 2.0.0
+  license:
+    name: MIT
+  description: 'Operations tagged Interaction across 2 of this provider''s published API definitions: gbg-go-v2-openapi.json, gbg-go-v2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eu.platform.go.gbgplc.com/v2/captain/
+- url: https://us.platform.go.gbgplc.com/v2/captain/
+- url: https://au.platform.go.gbgplc.com/v2/captain/
+- url: https://api.auth.gbgplc.com/as/token.oauth2
+security: []
+tags:
+- name: Interaction
+paths:
+  /journey/interaction/fetch:
+    post:
+      tags:
+      - Interaction
+      summary: Fetch current interaction
+      description: Retrieves the current interaction state for a journey instance.
+      security:
+      - CustomerAccess: []
+      - InteractionAccess: []
+      parameters:
+      - schema:
+          type: string
+          description: Response profile. Omit or 'full' for the full response (default, unchanged). 'slim' returns the compact, typed customer-facing shape. Any other value returns 400.
+          example: slim
+        required: false
+        description: Response profile. Omit or 'full' for the full response (default, unchanged). 'slim' returns the compact, typed customer-facing shape. Any other value returns 400.
+        name: view
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instanceId:
+                  type: string
+                  minLength: 16
+                  maxLength: 64
+                  pattern: ^[A-Za-z0-9_-]+$
+                  description: Journey Instance Id, a unique identifier for a started journey instance.
+                scope:
+                  type: string
+                  enum:
+                  - subject
+                  - reviewer
+              required:
+              - instanceId
+              additionalProperties: {}
+      responses:
+        '200':
+          description: Interaction state (full by default; slim with ?view=slim)
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/InteractionFetchResponse'
+                - $ref: '#/components/schemas/SlimInteractionFetchResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Instance not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyInteractionFetch
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /journey/interaction/submit:
+    post:
+      tags:
+      - Interaction
+      summary: Submit interaction data
+      description: Submits participant data for an interaction.
+      security:
+      - CustomerAccess: []
+      - InteractionAccess: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instanceId:
+                  type: string
+                  minLength: 16
+                  maxLength: 64
+                  pattern: ^[A-Za-z0-9_-]+$
+                  description: Journey Instance Id, a unique identifier for a started journey instance.
+                interactionId:
+                  type: string
+                  minLength: 1
+                participants:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      domainElementId:
+                        type: string
+                      instructions:
+                        type: array
+                        items:
+                          type: string
+                    additionalProperties: {}
+                context:
+                  type: object
+                  properties:
+                    subject:
+                      type: object
+                      properties:
+                        identity:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              minLength: 1
+                              description: Title of an individual such as Mr, Mrs, Dr, Sir
+                            firstName:
+                              type: string
+                              minLength: 1
+                              description: A person's name used by their collegues and friends to address them
+                            middleNames:
+                              type: array
+                              items:
+                                type: string
+                                minLength: 1
+                              description: Any other registered names used by the individual, not aliases
+                            lastNames:
+                              type: array
+                              items:
+                                type: string
+                                minLength: 1
+                              minItems: 1
+                              description: Any family names for the individual
+                            lastNamesAtBirth:
+                              type: array
+                              items:
+                                type: string
+                                minLength: 1
+                              minItems: 1
+                              description: Any family names for the individual
+                            aliases:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  title:
+                                    type: string
+                                    minLength: 1
+                                    description: Title of an individual such as Mr, Mrs, Dr, Sir
+                                  firstName:
+                                    type: string
+                                    minLength: 1
+                                    description: A person's name used by their collegues and friends to address them
+                                  middleNames:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    description: Any other registered names used by the individual, not aliases
+                                  lastNames:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    minItems: 1
+                                    description: Any family names for the individual
+                                  lastNamesAtBirth:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    minItems: 1
+                                    description: Any family names for the individual
+                                  fullName:
+                                    type: string
+                                    minLength: 1
+                                    description: The whole name as stated, unsplit into parts — used when the alias has no meaningful name parts
+                              description: Names the subject is otherwise or was previously known by — applicant-declared, unordered, duplicates permitted
+                            relatedPersons:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  title:
+                                    type: string
+                                    minLength: 1
+                                    description: Title of an individual such as Mr, Mrs, Dr, Sir
+                                  firstName:
+                                    type: string
+                                    minLength: 1
+                                    description: A person's name used by their collegues and friends to address them
+                                  middleNames:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    description: Any other registered names used by the individual, not aliases
+                                  lastNames:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    minItems: 1
+                                    description: Any family names for the individual
+                                  lastNamesAtBirth:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    minItems: 1
+                                    description: Any family names for the individual
+                                  relationship:
+                                    type: string
+                                    enum:
+                                    - mother
+                                    - father
+                                    - spouse
+                                    - maternalGrandFather
+                                    - maternalGrandMother
+                                    - paternalGrandFather
+                                    - paternalGrandMother
+                                required:
+                                - relationship
+                            dateOfBirth:
+                              type: string
+                              pattern: ^\d{4}-\d{2}-\d{2}$
+                              description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                            gender:
+                              type: string
+                              minLength: 1
+                            currentAddress:
+                              type: object
+                              properties:
+                                lines:
+                                  type: array
+                                  items:
+                                    type: string
+                                  description: Unformatted line based address
+                                addressString:
+                                  type: string
+                                  description: The address as a single line
+                                premise:
+                                  type: string
+                                  description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                building:
+                                  type: string
+                                  description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                subBuilding:
+                                  type: string
+                                  description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                thoroughfare:
+                                  type: string
+                                  description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                dependentThoroughfare:
+                                  type: string
+                                  description: The name of a dependent street or block, such as a street within a complex.
+                                locality:
+                                  type: string
+                                  description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                dependentLocality:
+                                  type: string
+                                  description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                doubleDependentLocality:
+                                  type: string
+                                  description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                postalCode:
+                                  type: string
+                                  description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                postBox:
+                                  type: string
+                                  description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                country:
+                                  type: string
+                                  pattern: ^[A-Z]{2,3}$
+                                  description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                superAdministrativeArea:
+                                  type: string
+                                administrativeArea:
+                                  type: string
+                                subAdministrativeArea:
+                                  type: string
+                                organization:
+                                  type: string
+                                location:
+                                  type: object
+                                  properties:
+                                    latitude:
+                                      type: string
+                                    longitude:
+                                      type: string
+                                    geoAccuracy:
+                                      type: string
+                                    what3words:
+                                      type: string
+                                      description: A What3words designation associated with this location with '.' separator.
+                            previousAddresses:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  lines:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: Unformatted line based address
+                                  addressString:
+                                    type: string
+                                    description: The address as a single line
+                                  premise:
+                                    type: string
+                                    description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                  building:
+                                    type: string
+                                    description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                  subBuilding:
+                                    type: string
+                                    description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                  thoroughfare:
+                                    type: string
+                                    description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                  dependentThoroughfare:
+                                    type: string
+                                    description: The name of a dependent street or block, such as a street within a complex.
+                                  locality:
+                                    type: string
+                                    description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                  dependentLocality:
+                                    type: string
+                                    description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                  doubleDependentLocality:
+                                    type: string
+                                    description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                  postalCode:
+                                    type: string
+                                    description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                  postBox:
+                                    type: string
+                                    description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                  country:
+                                    type: string
+                                    pattern: ^[A-Z]{2,3}$
+                                    description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                  superAdministrativeArea:
+                                    type: string
+                                  administrativeArea:
+                                    type: string
+                                  subAdministrativeArea:
+                                    type: string
+                                  organization:
+                                    type: string
+                                  location:
+                                    type: object
+                                    properties:
+                                      latitude:
+                                        type: string
+                                      longitude:
+                                        type: string
+                                      geoAccuracy:
+                                        type: string
+                                      what3words:
+                                        type: string
+                                        description: A What3words designation associated with this location with '.' separator.
+                                  fromDate:
+                                    type: string
+                                    pattern: ^\d{4}-\d{2}-\d{2}$
+                                    description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                                  toDate:
+                                    type: string
+                                    pattern: ^\d{4}-\d{2}-\d{2}$
+                                    description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                            placeOfBirth:
+                              type: object
+                              properties:
+                                lines:
+                                  type: array
+                                  items:
+                                    type: string
+                                  description: Unformatted line based address
+                                addressString:
+                                  type: string
+                                  description: The address as a single line
+                                premise:
+                                  type: string
+                                  description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                building:
+                                  type: string
+                                  description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                subBuilding:
+                                  type: string
+                                  description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                thoroughfare:
+                                  type: string
+                                  description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                dependentThoroughfare:
+                                  type: string
+                                  description: The name of a dependent street or block, such as a street within a complex.
+                                locality:
+                                  type: string
+                                  description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                dependentLocality:
+                                  type: string
+                                  description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                doubleDependentLocality:
+                                  type: string
+                                  description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                postalCode:
+                                  type: string
+                                  description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                postBox:
+                                  type: string
+                                  description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                country:
+                                  type: string
+                                  pattern: ^[A-Z]{2,3}$
+                                  description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                superAdministrativeArea:
+                                  type: string
+                                administrativeArea:
+                                  type: string
+                                subAdministrativeArea:
+                                  type: string
+                                organization:
+                                  type: string
+                                location:
+                                  type: object
+                                  properties:
+                                    latitude:
+                                      type: string
+                                    longitude:
+                                      type: string
+                                    geoAccuracy:
+                                      type: string
+                                    what3words:
+                                      type: string
+                                      description: A What3words designation associated with this location with '.' separator.
+                            idNumbers:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    description: The type of phone number, such as landline, mobile, fax, unknown etc
+                                  idNumber:
+                                    type: string
+                                    minLength: 1
+                                    description: ID number eg, National Insurance Number in UK, Social Securtiy Number in US
+                                  country:
+                                    type: string
+                                    pattern: ^[A-Z]{2,3}$
+                                    description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                required:
+                                - type
+                                - idNumber
+                            phones:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    description: The type of phone number, such as landline, mobile, fax, unknown etc
+                                  number:
+                                    type: string
+                                    minLength: 1
+                                    description: Phone number, ideally in international format with +(Country Code)
+                                required:
+                                - type
+                                - number
+                            emails:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    description: 'Email type discriminator. Canonical values: ''personal'', ''work'', ''home'', ''other''. Three map to a domain element by exact match: ''personal'' -> PersonalEmail, ''work'' -> WorkEmail, ''other'' -> OtherEmails (the domainElementId used to collect them). ''home'' is the only canonical value with no domain element: a ''home'' email is accepted and stored but cannot be retrieved through any v2 read (it matches no getter); use ''personal'', ''work'' or ''other'' to have the email surfaced. Legacy inputs normalize at the API boundary (e.g. ''email'' -> ''personal'').'
+                                  email:
+                                    type: string
+                                    minLength: 1
+                                    format: email
+                                    description: Email address
+                                required:
+                                - type
+                                - email
+                            socials:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    description: An agreed standardised name for the social media platform this identity relates to such as Facebook, Twitter, unknown etc
+                                  identity:
+                                    type: string
+                                    minLength: 1
+                                    description: the identity used on this platform
+                                required:
+                                - type
+                                - identity
+                            mothersMaidenName:
+                              type: string
+                              minLength: 1
+                              description: The subject's mother's maiden name, used for identity verification
+                            nationality:
+                              type: string
+                              pattern: ^[A-Z]{2,3}$
+                              description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                        entities:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              type:
+                                type: string
+                                enum:
+                                - primary
+                              name:
+                                type: string
+                              aliases:
+                                type: array
+                                items:
+                                  type: string
+                              businessType:
+                                type: string
+                              status:
+                                type: string
+                                enum:
+                                - active
+                                - suspended
+                                - dormant
+                                - dissolved
+                                - struckOff
+                                - unknown
+                              description:
+                                type: string
+                              addresses:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    lines:
+                                      type: array
+                                      items:
+                                        type: string
+                                      description: Unformatted line based address
+                                    addressString:
+                                      type: string
+                                      description: The address as a single line
+                                    premise:
+                                      type: string
+                                      description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                    building:
+                                      type: string
+                                      description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                    subBuilding:
+                                      type: string
+                                      description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                    thoroughfare:
+                                      type: string
+                                      description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                    dependentThoroughfare:
+                                      type: string
+                                      description: The name of a dependent street or block, such as a street within a complex.
+                                    locality:
+                                      type: string
+                                      description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                    dependentLocality:
+                                      type: string
+                                      description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                    doubleDependentLocality:
+                                      type: string
+                                      description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                    postalCode:
+                                      type: string
+                                      description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                    postBox:
+                                      type: string
+                                      description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                    country:
+                                      type: string
+                                      pattern: ^[A-Z]{2,3}$
+                                      description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                    superAdministrativeArea:
+                                      type: string
+                                    administrativeArea:
+                                      type: string
+                                    subAdministrativeArea:
+                                      type: string
+                                    organization:
+                                      type: string
+                                    location:
+                                      type: object
+                                      properties:
+                                        latitude:
+                                          type: string
+                                        longitude:
+                                          type: string
+                                        geoAccuracy:
+                                          type: string
+                                        what3words:
+                                          type: string
+                                          description: A What3words designation associated with this location with '.' separator.
+                                    purpose:
+                                      type: string
+                                      enum:
+                                      - registered
+                                      - mailing
+                                      - site
+                                      - agent
+                                      - headquarters
+                              taxIdentifiers:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      enum:
+                                      - TIN
+                                      - EIN
+                                    value:
+                                      type: string
+                                    country:
+                                      type: string
+                                      pattern: ^[A-Z]{2,3}$
+                                      description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                  required:
+                                  - type
+                                  - value
+                              companyNumber:
+                                type: string
+                              industryClassifications:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                      enum:
+                                      - naics2017
+                                      - naics2022
+                                      - sic
+                                      - mcc
+                                    code:
+                                      type: string
+                                    description:
+                                      type: string
+                                  required:
+                                  - system
+                                  - code
+                              registrations:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    jurisdiction:
+                                      type: string
+                                    registrationType:
+                                      type: string
+                                      enum:
+                                      - domestic
+                                      - foreign
+                                      - unknown
+                                    fileNumber:
+                                      type: string
+                                    issueDate:
+                                      type: string
+                                      pattern: ^\d{4}-\d{2}-\d{2}$
+                                      description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                                    registeredAddress:
+                                      type: object
+                                      properties:
+                                        lines:
+                                          type: array
+                                          items:
+                                            type: string
+                                          description: Unformatted line based address
+                                        addressString:
+                                          type: string
+                                          description: The address as a single line
+                                        premise:
+                                          type: string
+                                          description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                        building:
+                                          type: string
+                                          description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                        subBuilding:
+                                          type: string
+                                          description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                        thoroughfare:
+                                          type: string
+                                          description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                        dependentThoroughfare:
+                                          type: string
+                                          description: The name of a dependent street or block, such as a street within a complex.
+                                        locality:
+                                          type: string
+                                          description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                        dependentLocality:
+                                          type: string
+                                          description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                        doubleDependentLocality:
+                                          type: string
+                                          description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                        postalCode:
+                                          type: string
+                                          description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                        postBox:
+                                          type: string
+                                          description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                        country:
+                                          type: string
+                                          pattern: ^[A-Z]{2,3}$
+                                          description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                        superAdministrativeArea:
+                                          type: string
+                                        administrativeArea:
+                                          type: string
+                                        subAdministrativeArea:
+                                          type: string
+                                        organization:
+                                          type: string
+                                        location:
+                                          type: object
+                                          properties:
+                                            latitude:
+                                              type: string
+                                            longitude:
+                                              type: string
+                                            geoAccuracy:
+                                              type: string
+                                            what3words:
+                                              type: string
+                                              description: A What3words designation associated with this location with '.' separator.
+                                    agentName:
+                                      type: string
+                                    agentAddress:
+                                      type: object
+                                      properties:
+                                        lines:
+                                          type: array
+                                          items:
+                                            type: string
+                                          description: Unformatted line based address
+                                        addressString:
+                                          type: string
+                                          description: The address as a single line
+                                        premise:
+                                          type: string
+                                          description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                        building:
+                                          type: string
+                                          description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                        subBuilding:
+                                          type: string
+                                          description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                        thoroughfare:
+                                          type: string
+                                          description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                        dependentThoroughfare:
+                                          type: string
+                                          description: The name of a dependent street or block, such as a street within a complex.
+                                        locality:
+                                          type: string
+                                          description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                        dependentLocality:
+                                          type: string
+                                          description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                        doubleDependentLocality:
+                                          type: string
+                                          description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                        postalCode:
+                                          type: string
+                                          description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                        postBox:
+                                          type: string
+                                          description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                        country:
+                                          type: string
+                                          pattern: ^[A-Z]{2,3}$
+                                          description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                        superAdministrativeArea:
+                                          type: string
+                                        administrativeArea:
+                                          type: string
+                                        subAdministrativeArea:
+                                          type: string
+                                        organization:
+                                          type: string
+                                        location:
+                                          type: object
+                                          properties:
+                                            latitude:
+                                              type: string
+                                            longitude:
+                                              type: string
+                                            geoAccuracy:
+                                              type: string
+                                            what3words:
+                                              type: string
+                                              description: A What3words designation associated with this location with '.' separator.
+                              corporateStructure:
+                                type: string
+                              persons:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    title:
+                                      type: string
+                                      minLength: 1
+                                      description: Title of an individual such as Mr, Mrs, Dr, Sir
+                                    firstName:
+                                      type: string
+                                      minLength: 1
+                                      description: A person's name used by their collegues and friends to address them
+                                    middleNames:
+                                      type: array
+                                      items:
+                                        type: string
+                                        minLength: 1
+                                      description: Any other registered names used by the individual, not aliases
+                                    lastNames:
+                                      type: array
+                                      items:
+                                        type: string
+                                        minLength: 1
+                                      minItems: 1
+                                      description: Any family names for the individual
+                                    lastNamesAtBirth:
+                                      type: array
+                                      items:
+                                        type: string
+                                        minLength: 1
+                                      minItems: 1
+                                      description: Any family names for the individual
+                                    id:
+                                      type: string
+                                    type:
+                                      type: string
+                                      enum:
+                                      - primary
+                                    role:
+                                      type: string
+                                      enum:
+                                      - ultimateBeneficialOwner
+                                      - director
+                                      - officer
+                                      - secretary
+                                      - shareholder
+                                      - partner
+                                    position:
+                                      type: string
+                                    ownershipPercentage:
+                                      type: number
+                                      minimum: 0
+                                      maximum: 100
+                                    nationality:
+                                      type: string
+                                      pattern: ^[A-Z]{2,3}$
+                                      description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                    dateOfBirth:
+                                      anyOf:
+                                      - type: string
+                                        pattern: ^\d{4}-\d{2}-\d{2}$
+                                        description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                                      - type: string
+                                        pattern: ^\d{4}-\d{2}$
+                                        description: 'Year and month in ISO 8601 format: YYYY-MM'
+                                    startDate:
+                                      type: string
+                                      pattern: ^\d{4}-\d{2}-\d{2}$
+                                      description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                                    endDate:
+                                      type: string
+                                      pattern: ^\d{4}-\d{2}-\d{2}$
+                                      description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                                    currentAddress:
+                                      type: object
+                                      properties:
+                                        lines:
+                                          type: array
+                                          items:
+                                            type: string
+                                          description: Unformatted line based address
+                                        addressString:
+                                          type: string
+                                          description: The address as a single line
+                                        premise:
+                                          type: string
+                                          description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                        building:
+                                          type: string
+                                          description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                        subBuilding:
+                                          type: string
+                                          description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                        thoroughfare:
+                                          type: string
+                                          description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                        dependentThoroughfare:
+                                          type: string
+                                          description: The name of a dependent street or block, such as a street within a complex.
+                                        locality:
+                                          type: string
+                                          description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                        dependentLocality:
+                                          type: string
+                                          description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                        doubleDependentLocality:
+                                          type: string
+                                          description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                        postalCode:
+                                          type: string
+                                          description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                        postBox:
+                                          type: string
+                                          description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                        country:
+                                          type: string
+                                          pattern: ^[A-Z]{2,3}$
+                                          description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                        superAdministrativeArea:
+                                          type: string
+                                        administrativeArea:
+                                          type: string
+                                        subAdministrativeArea:
+                                          type: string
+                                        organization:
+                                          type: string
+                                        location:
+                                          type: object
+                                          properties:
+                                            latitude:
+                                              type: string
+                                            longitude:
+                                              type: string
+                                            geoAccuracy:
+                                              type: string
+                                            what3words:
+                                              type: string
+                                              description: A What3words designation associated with this location with '.' separator.
+                              incorporationDate:
+                                type: string
+                                pattern: ^\d{4}-\d{2}-\d{2}$
+                                description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                              dissolutionDate:
+                                type: string
+                                pattern: ^\d{4}-\d{2}-\d{2}$
+                                description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                              phones:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      description: The type of phone number, such as landline, mobile, fax, unknown etc
+                                    number:
+                                      type: string
+                                      minLength: 1
+                                      description: Phone number, ideally in international format with +(Country Code)
+                                  required:
+                                  - type
+                                  - number
+                              websites:
+                                type: array
+                                items:
+                                  type: string
+                                  format: uri
+                              headcount:
+                                type: integer
+                                minimum: 0
+                              isNonProfit:
+                                type: boolean
+                        documents:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              oneDBarcode:
+                                type: string
+                              address:
+                                type: object
+                                properties:
+                                  addressString:
+                                    type: string
+                                  extractedAddressString:
+                                    type: string
+                                  addressLine1:
+                                    type: string
+                                  addressLine2:
+                                    type: string
+                                  locality:
+                                    type: string
+                                  administrativeArea:
+                                    type: string
+                                  postalCode:
+                                    type: string
+                              applicationDate:
+                                type: string
+                              applicationNumber:
+                                type: string
+                              dateOfBirth:
+                                type: string
+                              placeOfBirth:
+                                type: string
+                              placeOfBirthNative:
+                                type: string
+                              bloodType:
+                                type: string
+                              controlNumber:
+                                type: string
+                              countryCode:
+                                type: string
+                              countryName:
+                                type: string
+                              documentClassCode:
+                                type: string
+                              documentClassName:
+                                type: string
+                              documentNumber:
+                                type: string
+                              documentSignerCertificate:
+                                type: string
+                              employer:
+                                type: string
+                              employerAddress:
+                                type: string
+                              entries:
+                                type: string
+                              expirationDate:
+                                type: string
+                              eyeColor:
+                                type: string
+                              fathersName:
+                                type: string
+                              fathersNameNative:
+                                type: string
+                              fathersSurname:
+                                type: string
+                              firstName:
+                                type: string
+                              fullName:
+                                type: string
+                              fullNameNative:
+                                type: string
+                              givenName:
+                                type: string
+                              givenNameNative:
+                                type: string
+                              hairColor:
+                                type: string
+                              height:
+                                type: string
+                              issueDate:
+                                type: string
+                                pattern: ^\d{4}-\d{2}-\d{2}$
+                                description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                              issuingAuthority:
+                                type: string
+                              issuingAuthorityNative:
+                                type: string
+                              issuingStateCode:
+                                type: string
+                              issuingStateName:
+                                type: string
+                              licenseClass:
+                                type: string
+                              licenseEndorsements:
+                                type: string
+                              licenseRestrictions:
+                                type: string
+                              mrz:
+                                type: string
+                                minLength: 1
+                              mrz1:
+                                type: string
+                              mrz2:
+                                type: string
+                              mrz3:
+                                type: string
+                              middleName:
+                                type: string
+                              mothersName:
+                                type: string
+                              mothersNameNative:
+                                type: string
+                              mothersSurname:
+                                type: string
+                              nameSuffix:
+                                type: string
+                              nationalityCode:
+                                type: string
+                              nationalityName:
+                                type: string
+                              nationalityNameNative:
+                                type: string
+                              occupation:
+                                type: string
+                              organDonor:
+                                type: boolean
+                              passportNumber:
+                                type: string
+                              permitNumber:
+                                type: string
+                              personalNumber:
+                                type: string
+                              photo:
+                                type: string
+                              photoCompressed:
+                                type: string
+                              photoEncoding:
+                                type: string
+                              sex:
+                                type: string
+                              sexNative:
+                                type: string
+                              signature:
+                                type: string
+                              signatureCompressed:
+                                type: string
+                              signatureEncoding:
+                                type: string
+                              socialSecurityNumber:
+                                type: string
+                              startDate:
+                                type: string
+                              surname:
+                                type: string
+                              surnameNative:
+                                type: string
+                              visaClass:
+                                type: string
+                              visaNumber:
+                                type: string
+                              weight:
+                                type: string
+                              cardNumber:
+                                type: string
+                              issuerCountryCode:
+                                type: string
+                                pattern: ^[A-Z]{2,3}$
+                                description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                              id:
+                                type: string
+                              type:
+                                type: string
+                                minLength: 1
+                              category:
+                                type: string
+                              subtype:
+                                type: string
+                              format:
+                                type: string
+                              device:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  model:
+                                    type: string
+                                  hasContactlessReader:
+                                    type: boolean
+                                  hasMagneticStripeReader:
+                                    type: boolean
+                                  hasCamera:
+                                    type: boolean
+                                  serialNumber:
+                                    type: string
+                                  manufacturer:
+                                    type: string
+                              side1Image:
+                                type: string
+                                minLength: 1
+                                contentMediaType: image/*
+                              side2Image:
+                                type: string
+                                minLength: 1
+                                contentMediaType: image/*
+                              side1Device:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  model:
+                                    type: string
+                                  hasContactlessReader:
+                                    type: boolean
+                                  hasMagneticStripeReader:
+                                    type: boolean
+                                  hasCamera:
+                                    type: boolean
+                                  serialNumber:
+                                    type: string
+                                  manufacturer:
+                                    type: string
+                              side2Device:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  model:
+                                    type: string
+                                  hasContactlessReader:
+                                    type: boolean
+                                  hasMagneticStripeReader:
+                                    type: boolean
+                                  hasCamera:
+                                    type: boolean
+                                  serialNumber:
+                                    type: string
+                                  manufacturer:
+                                    type: string
+                              chip:
+                                type: object
+                                properties:
+                                  lds:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                          enum:
+                                          - COM
+                                          - SOD
+                                          - DG1
+                                          - DG2
+                                          - DG3
+                                          - DG4
+                                          - DG5
+                                          - DG6
+                                          - DG7
+                                          - DG8
+                                          - DG9
+                                          - DG10
+                                          - DG11
+                                          - DG12
+                                          - DG13
+                                          - DG14
+                                          - DG15
+                                        data:
+                                          type: string
+                                          minLength: 1
+                                      required:
+                                      - name
+                                      - data
+                                      additionalProperties: {}
+                                  auth:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                          enum:
+                                          - ActiveAuthentication
+                                          - BasicAccessControl
+                                          - ChipAuthentication
+                                          - PassiveAuthentication
+                                          - SupplementalAccessControl
+                                          - ExtendedAccessControl
+                                          - TerminalAuthentication
+                                        result:
+                                          type: string
+                                          enum:
+                                          - Success
+                                          - Failure
+                                          - Skipped
+                                      required:
+                                      - type
+                                      - result
+                                      additionalProperties: {}
+                                required:
+                                - lds
+                                - auth
+                                additionalProperties: {}
+                              classification:
+                                type: object
+                                properties:
+                                  ids:
+                                    type: array
+                                    items:
+                                      type: string
+                                  category:
+                                    type: string
+                                  type:
+                                    type: string
+                                  subtype:
+                                    type: string
+                                  isDoubleSided:
+                                    type: boolean
+                                  hasNFC:
+                                    type: boolean
+                                  year:
+                                    type: string
+                                  countryCode:
+                                    type: string
+                                  countryName:
+                                    type: string
+                                  stateCode:
+                                    type: string
+                                  stateName:
+                                    type: string
+                                  sides:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        side:
+                                          type: string
+                                        id:
+                                          type: string
+                                        documentQuality:
+                                          type: string
+                                        documentQualityScore:
+                                          type: number
+                                      required:
+                                      - side
+                                      - id
+                                      - documentQuality
+                                      - documentQualityScore
+                              extraction:
+                                type: object
+                                properties:
+                                  aggregatedFields:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        label:
+                                          type: string
+                                        value:
+                                          type: string
+                                        source:
+                                          type: string
+                                        isNonLatin:
+                                          type: boolean
+                                        regionOfInterest:
+                                          type: object
+                                          properties:
+                                            boundingBox:
+                                              type: object
+                                              properties:
+                                                x:
+                                                  type: number
+                                                y:
+                                                  type: number
+                                                width:
+                                                  type: number
+                                                height:
+                                                  type: number
+                                              required:
+                                              - x
+                                              - y
+                                              - width
+                                              - height
+                                            side:
+                                              type: string
+                                            spectrum:
+                                              type: string
+                                            imageId:
+                                              type: string
+                                          required:
+                                          - side
+                                      required:
+                                      - label
+                                      - value
+                                      - source
+                                      - isNonLatin
+                                  extractedFields:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        label:
+                                          type: string
+                                        details:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              label:
+                                                type: string
+                                              value:
+                                                type: string
+                                              source:
+                                                type: string
+                                              isNonLatin:
+                                                type: boolean
+                                              regionOfInterest:
+                                                type: object
+                                                properties:
+                                                  boundingBox:
+                                                    type: object
+                                                    properties:
+                                                      x:
+                                                        type: number
+                                                      y:
+                                                        type: number
+                                                      width:
+                                                        type: number
+                                                      height:
+                                                        type: number
+                                                    required:
+                                                    - x
+                                                    - y
+                                                    - width
+                                                    - height
+                                                  side:
+                                                    type: string
+                                                  spectrum:
+                                                    type: string
+                                                  imageId:
+                                                    type: string
+                                                required:
+                                                - side
+                                            required:
+                                            - label
+                                            - value
+                                            - source
+                                            - isNonLatin
+                                      required:
+                                      - label
+                                      - details
+                                  extractedImages:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        label:
+                                          type: string
+                                        side:
+                                          type: string
+                                        imageID:
+                                          type: string
+                                      required:
+                                      - label
+                                      - side
+                                      - imageID
+                              validation:
+                                type: object
+                                properties:
+                                  validationChecks:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                        title:
+                                          type: string
+                                        info:
+                                          type: string
+                                        validationResult:
+                                          type: string
+                                        resultInfo:
+                                          type: string
+                                        weight:
+                                          type: string
+                                        regionOfInterests:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              boundingBox:
+                                                type: object
+                                                properties:
+                                                  x:
+                                                    type: number
+                                                  y:
+                                                    type: number
+                                                  width:
+                                                    type: number
+                                                  height:
+                                                    type: number
+                                                required:
+                                                - x
+                                                - y
+                                                - width
+                                                - height
+                                              side:
+                                                type: string
+                                              spectrum:
+                                                type: string
+                                              imageId:
+                                                type: string
+                                            required:
+                                            - side
+                                        type:
+                                          type: string
+                                      required:
+                                      - name
+                                      - title
+                                      - info
+                                      - validationResult
+                                      - resultInfo
+                                      - weight
+                                      - type
+                                  aggregatedValidationChecks:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                        title:
+                                          type: string
+                                        info:
+                                          type: string
+                                        validationResult:
+                                          type: string
+                                        resultInfo:
+                                          type: string
+                                        weight:
+                                          type: string
+                                        regionOfInterests:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              boundingBox:
+                                                type: object
+                                                properties:
+                                                  x:
+                                                    type: number
+                                                  y:
+                                                    type: number
+                                                  width:
+                                                    type: number
+                                                  height:
+                                                    type: number
+                                                required:
+                                                - x
+                                                - y
+                                                - width
+                                                - height
+                                              side:
+                                                type: string
+                                              spectrum:
+                                                type: string
+                                              imageId:
+                                                type: string
+                                            required:
+                                            - side
+                                        type:
+                                          type: string
+                                      required:
+                                      - name
+                                      - title
+                                      - info
+                                      - validationResult
+                                      - resultInfo
+                                      - weight
+                                      - type
+                              subType:
+                                type: string
+                              number:
+                                type: string
+                                minLength: 1
+                              expiryDate:
+                                type: string
+                                pattern: ^\d{4}-\d{2}-\d{2}$
+                                description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                              cardType:
+                                type: string
+                              expiryMonth:
+                                type: string
+                                pattern: ^\d{4}-\d{2}$
+                                description: 'Year and month in ISO 8601 format: YYYY-MM'
+                              cardColour:
+                                type: string
+                              cardStatus:
+                                type: string
+                              subject:
+                                type: object
+                                properties:
+                                  title:
+                                    type: string
+                                    minLength: 1
+                                    description: Title of an individual such as Mr, Mrs, Dr, Sir
+                                  firstName:
+                                    type: string
+                                    minLength: 1
+                                    description: A person's name used by their collegues and friends to address them
+                                  middleNames:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    description: Any other registered names used by the individual, not aliases
+                                  lastNames:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    minItems: 1
+                                    description: Any family names for the individual
+                                  lastNamesAtBirth:
+                                    type: array
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    minItems: 1
+                                    description: Any family names for the individual
+                                  aliases:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        title:
+                                          type: string
+                                          minLength: 1
+                                          description: Title of an individual such as Mr, Mrs, Dr, Sir
+                                        firstName:
+                                          type: string
+                                          minLength: 1
+                                          description: A person's name used by their collegues and friends to address them
+                                        middleNames:
+                                          type: array
+                                          items:
+                                            type: string
+                                            minLength: 1
+                                          description: Any other registered names used by the individual, not aliases
+                                        lastNames:
+                                          type: array
+                                          items:
+                                            type: string
+                                            minLength: 1
+                                          minItems: 1
+                                          description: Any family names for the individual
+                                        lastNamesAtBirth:
+                                          type: array
+                                          items:
+                                            type: string
+                                            minLength: 1
+                                          minItems: 1
+                                          description: Any family names for the individual
+                                        fullName:
+                                          type: string
+                                          minLength: 1
+                                          description: The whole name as stated, unsplit into parts — used when the alias has no meaningful name parts
+                                    description: Names the subject is otherwise or was previously known by — applicant-declared, unordered, duplicates permitted
+                                  relatedPersons:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        title:
+                                          type: string
+                                          minLength: 1
+                                          description: Title of an individual such as Mr, Mrs, Dr, Sir
+                                        firstName:
+                                          type: string
+                                          minLength: 1
+                                          description: A person's name used by their collegues and friends to address them
+                                        middleNames:
+                                          type: array
+                                          items:
+                                            type: string
+                                            minLength: 1
+                                          description: Any other registered names used by the individual, not aliases
+                                        lastNames:
+                                          type: array
+                                          items:
+                                            type: string
+                                            minLength: 1
+                                          minItems: 1
+                                          description: Any family names for the individual
+                                        lastNamesAtBirth:
+                                          type: array
+                                          items:
+                                            type: string
+                                            minLength: 1
+                                          minItems: 1
+                                          description: Any family names for the individual
+                                        relationship:
+                                          type: string
+                                          enum:
+                                          - mother
+                                          - father
+                                          - spouse
+                                          - maternalGrandFather
+                                          - maternalGrandMother
+                                          - paternalGrandFather
+                                          - paternalGrandMother
+                                      required:
+                                      - relationship
+                                  dateOfBirth:
+                                    type: string
+                                    pattern: ^\d{4}-\d{2}-\d{2}$
+                                    description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                                  gender:
+                                    type: string
+                                    minLength: 1
+                                  currentAddress:
+                                    type: object
+                                    properties:
+                                      lines:
+                                        type: array
+                                        items:
+                                          type: string
+                                        description: Unformatted line based address
+                                      addressString:
+                                        type: string
+                                        description: The address as a single line
+                                      premise:
+                                        type: string
+                                        description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                      building:
+                                        type: string
+                                        description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                      subBuilding:
+                                        type: string
+                                        description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                      thoroughfare:
+                                        type: string
+                                        description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                      dependentThoroughfare:
+                                        type: string
+                                        description: The name of a dependent street or block, such as a street within a complex.
+                                      locality:
+                                        type: string
+                                        description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                      dependentLocality:
+                                        type: string
+                                        description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                      doubleDependentLocality:
+                                        type: string
+                                        description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                      postalCode:
+                                        type: string
+                                        description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                      postBox:
+                                        type: string
+                                        description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                      country:
+                                        type: string
+                                        pattern: ^[A-Z]{2,3}$
+                                        description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                      superAdministrativeArea:
+                                        type: string
+                                      administrativeArea:
+                                        type: string
+                                      subAdministrativeArea:
+                                        type: string
+                                      organization:
+                                        type: string
+                                      location:
+                                        type: object
+                                        properties:
+                                          latitude:
+                                            type: string
+                                          longitude:
+                                            type: string
+                                          geoAccuracy:
+                                            type: string
+                                          what3words:
+                                            type: string
+                                            description: A What3words designation associated with this location with '.' separator.
+                                  previousAddresses:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        lines:
+                                          type: array
+                                          items:
+                                            type: string
+                                          description: Unformatted line based address
+                                        addressString:
+                                          type: string
+                                          description: The address as a single line
+                                        premise:
+                                          type: string
+                                          description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                        building:
+                                          type: string
+                                          description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                        subBuilding:
+                                          type: string
+                                          description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                        thoroughfare:
+                                          type: string
+                                          description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                        dependentThoroughfare:
+                                          type: string
+                                          description: The name of a dependent street or block, such as a street within a complex.
+                                        locality:
+                                          type: string
+                                          description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                        dependentLocality:
+                                          type: string
+                                          description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                        doubleDependentLocality:
+                                          type: string
+                                          description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                        postalCode:
+                                          type: string
+                                          description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                        postBox:
+                                          type: string
+                                          description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                        country:
+                                          type: string
+                                          pattern: ^[A-Z]{2,3}$
+                                          description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                        superAdministrativeArea:
+                                          type: string
+                                        administrativeArea:
+                                          type: string
+                                        subAdministrativeArea:
+                                          type: string
+                                        organization:
+                                          type: string
+                                        location:
+                                          type: object
+                                          properties:
+                                            latitude:
+                                              type: string
+                                            longitude:
+                                              type: string
+                                            geoAccuracy:
+                                              type: string
+                                            what3words:
+                                              type: string
+                                              description: A What3words designation associated with this location with '.' separator.
+                                        fromDate:
+                                          type: string
+                                          pattern: ^\d{4}-\d{2}-\d{2}$
+                                          description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                                        toDate:
+                                          type: string
+                                          pattern: ^\d{4}-\d{2}-\d{2}$
+                                          description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                                  placeOfBirth:
+                                    type: object
+                                    properties:
+                                      lines:
+                                        type: array
+                                        items:
+                                          type: string
+                                        description: Unformatted line based address
+                                      addressString:
+                                        type: string
+                                        description: The address as a single line
+                                      premise:
+                                        type: string
+                                        description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+                                      building:
+                                        type: string
+                                        description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+                                      subBuilding:
+                                        type: string
+                                        description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+                                      thoroughfare:
+                                        type: string
+                                        description: This field holds the most common street or block data element within a country. For instance, USA Street
+                                      dependentThoroughfare:
+                                        type: string
+                                        description: The name of a dependent street or block, such as a street within a complex.
+                                      locality:
+                                        type: string
+                                        description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+                                      dependentLocality:
+                                        type: string
+                                        description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+                                      doubleDependentLocality:
+                                        type: string
+                                        description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+                                      postalCode:
+                                        type: string
+                                        description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+                                      postBox:
+                                        type: string
+                                        description: This field contains the post box number associated with a particular delivery point, should one exist.
+                                      country:
+                                        type: string
+                                        pattern: ^[A-Z]{2,3}$
+                                        description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                      superAdministrativeArea:
+                                        type: string
+                                      administrativeArea:
+                                        type: string
+                                      subAdministrativeArea:
+                                        type: string
+                                      organization:
+                                        type: string
+                                      location:
+                                        type: object
+                                        properties:
+                                          latitude:
+                                            type: string
+                                          longitude:
+                                            type: string
+                                          geoAccuracy:
+                                            type: string
+                                          what3words:
+                                            type: string
+                                            description: A What3words designation associated with this location with '.' separator.
+                                  idNumbers:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                          description: The type of phone number, such as landline, mobile, fax, unknown etc
+                                        idNumber:
+                                          type: string
+                                          minLength: 1
+                                          description: ID number eg, National Insurance Number in UK, Social Securtiy Number in US
+                                        country:
+                                          type: string
+                                          pattern: ^[A-Z]{2,3}$
+                                          description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                                      required:
+                                      - type
+                                      - idNumber
+                                  phones:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                          description: The type of phone number, such as landline, mobile, fax, unknown etc
+                                        number:
+                                          type: string
+                                          minLength: 1
+                                          description: Phone number, ideally in international format with +(Country Code)
+                                      required:
+                                      - type
+                                      - number
+                                  emails:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                          description: 'Email type discriminator. Canonical values: ''personal'', ''work'', ''home'', ''other''. Three map to a domain element by exact match: ''personal'' -> PersonalEmail, ''work'' -> WorkEmail, ''other'' -> OtherEmails (the domainElementId used to collect them). ''home'' is the only canonical value with no domain element: a ''home'' email is accepted and stored but cannot be retrieved through any v2 read (it matches no getter); use ''personal'', ''work'' or ''other'' to have the email surfaced. Legacy inputs normalize at the API boundary (e.g. ''email'' -> ''personal'').'
+                                        email:
+                                          type: string
+                                          minLength: 1
+                                          format: email
+                                          description: Email address
+                                      required:
+                                      - type
+                                      - email
+                                  socials:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                          description: An agreed standardised name for the social media platform this identity relates to such as Facebook, Twitter, unknown etc
+                                        identity:
+                                          type: string
+                                          minLength: 1
+                                          description: the identity used on this platform
+                                      required:
+                                      - type
+                                      - identity
+                                  mothersMaidenName:
+                                    type: string
+                                    minLength: 1
+                                    description: The subject's mother's maiden name, used for identity verification
+                                  nationality:
+                                    type: string
+                                    pattern: ^[A-Z]{2,3}$
+                                    description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                              country:
+                                type: string
+                                pattern: ^[A-Z]{2,3}$
+                                description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                              certificateFormat:
+                                type: string
+                                minLength: 1
+                              registrationNumber:
+                                type: string
+                                minLength: 1
+                              registrationDate:
+                                type: string
+                                pattern: ^\d{4}-\d{2}-\d{2}$
+                                description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                              registrationYear:
+                                type: string
+                                pattern: ^\d{4}$
+                                description: 'Four-digit calendar year in ISO 8601 format: YYYY'
+                              partyRole:
+                                type: string
+                                minLength: 1
+                              dateOfEvent:
+                                type: string
+                                pattern: ^\d{4}-\d{2}-\d{2}$
+                                description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+                              previousFirstName:
+                                type: string
+                                minLength: 1
+                              previousMiddleName:
+                                type: string
+                                minLength: 1
+                              previousSurname:
+                                type: string
+                                minLength: 1
+                              individualReferenceNumber:
+                                type: string
+                                minLength: 1
+                              nameLine1:
+                                type: string
+                                minLength: 1
+                              nameLine2:
+                                type: string
+                              nameLine3:
+                                type: string
+                              nameLine4:
+                                type: string
+                            required:
+                            - type
+                          maxItems: 50
+                        biometrics:
+                          type: array
+                          items:
+                            anyOf:
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                face1Image:
+                                  type: string
+                                  minLength: 1
+                                  contentMediaType: image/*
+                                face2Image:
+                                  type: string
+                                  minLength: 1
+                                  contentMediaType: image/*
+                              required:
+                              - face1Image
+                              - face2Image
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                selfieImage:
+                                  type: string
+                                  minLength: 1
+                                  contentMediaType: image/*
+                                anchorImage:
+                                  type: string
+                                  minLength: 1
+                                  contentMediaType: image/*
+                              required:
+                              - selfieImage
+                              - anchorImage
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                faceImage:
+                                  type: string
+                                  minLength: 1
+                                  contentMediaType: image/*
+                              required:
+                              - faceImage
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                selfieImage:
+                                  type: string
+                                  minLength: 1
+                                  contentMediaType: image/*
+                                selfieImageEncryption:
+                                  type: boolean
+                              required:
+                              - selfieImage
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                anchorImage:
+                                  type: string
+                                  minLength: 1
+                                  contentMediaType: image/*
+                              required:
+                              - anchorImage
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                  enum:
+                                  - storedFace
+                                templateReference:
+                                  type: string
+                                  minLength: 1
+                              required:
+                              - type
+                              - templateReference
+                          maxItems: 50
+                        sessions:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              type:
+                                type: string
+                                minLength: 1
+                              provider:
+                                type: string
+                              user:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  email:
+                                    type: string
+                                    format: email
+                                  domain:
+                                    type: string
+                                required:
+                                - id
+                              client:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  ip:
+                                    anyOf:
+                                    - type: string
+                                      format: ip
+                                    - type: string
+                                      format: ip
+                                  address:
+                                    type: string
+                                required:
+                                - id
+                                - ip
+                                - address
+                              device:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  manufacturer:
+                                    type: string
+                                  model:
+                                    type: object
+                                    properties:
+                                      identifier:
+                                        type: string
+                                      name:
+                                        type: string
+                                    required:
+                                    - identifier
+                                    - name
+                                required:
+                                - id
+                                - manufacturer
+                                - model
+                              trace:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                required:
+                                - id
+                              span:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                required:
+                                - id
+                              transaction:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                required:
+                                - id
+                              auth:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: string
+                                    scope:
+                                      type: string
+                                    codeVerifier:
+                                      type: string
+                                    code:
+                                      type: string
+                                    state:
+                                      type: string
+                                    redirectUri:
+                                      type: string
+                                    responseType:
+                                      type: string
+                                    clientId:
+                                      type: string
+                                    clientSecret:
+                                      type: string
+                                  required:
+                                  - id
+                        consent:
+                          type: array
+                          items:
+                            allOf:
+                            - type: object
+                              properties:
+                                type:
+                                  type: string
+                                  enum:
+                                  - rollup
+                                  - explicit
+                                  - implicit
+                                id:
+                                  type: string
+                                version:
+                                  type: string
+                                url:
+                                  type: string
+                                  format: uri
+                                effectiveDate:
+                                  type: string
+                                expiryDate:
+                                  type: string
+                                terms:
+                                  type: string
+                                purpose:
+                                  type: string
+                                legalBasis:
+                                  type: string
+                                jurisdiction:
+                                  type: string
+                                subject:
+                                  type: string
+                                signatory:
+                                  type: string
+                            - type: object
+                              properties:
+                                url:
+                                  type: string
+                                  format: uri
+                              required:
+                              - url
+                        accounts:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                description: The type of account (canonical camelCase, e.g. "bankAccount"). Legacy value "Bank Account" is still read but new writes emit the canonical form.
+                              accountNumber:
+                                type: string
+                                minLength: 1
+                                description: 'Account number in its domestic form. Optional on its own: an account must carry at least one account identifier — `accountNumber` or `iban` — and either alone is enough. Independent of `iban`; when both are supplied they are not cross-checked.'
+                              sortCode:
+                                type: string
+                                description: UK sort code
+                              routingNumber:
+                                type: string
+                                description: US ABA routing number
+                              iban:
+                                type: string
+                                description: 'International Bank Account Number, stored exactly as supplied — not format-checked (no ISO 13616 mod-97) at this boundary. Optional on its own: an account must carry at least one account identifier — `accountNumber` or `iban` — and either alone is enough.'
+                              bic:
+                                type: string
+                                description: BIC/SWIFT code
+                              accountHolderName:
+                                type: string
+                                description: Name on the account
+                              bankName:
+                                type: string
+                                description: Name of the financial institution
+                              country:
+                                type: string
+                                pattern: ^[A-Z]{2,3}$
+                                description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+                              accountType:
+                                type: string
+                                description: Account classification, e.g. current, savings
+                            required:
+                            - type
+                        kba:
+                          type: object
+                          properties:
+                            questions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    minimum: 1
+                                    maximum: 10
+                                  questionText:
+                                    type: string
+                                  helpText:
+                                    type: string
+                                  choices:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        label:
+                                          type: string
+                                        text:
+                                          type: string
+                                      required:
+                                      - label
+                                      - text
+                                required:
+                                - id
+                                - questionText
+                                - choices
+                            answers:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    minimum: 1
+                                    maximum: 10
+                                  choices:
+                                    type: array
+                                    items:
+                                      type: string
+                                required:
+                                - id
+                                - choices
+                          required:
+                          - questions
+                          - answers
+                        documentTypeSelection:
+                          type: object
+                          properties:
+                            offered:
+                              type: array
+                              items:
+                                type: string
+                                enum:
+                                - australiaPassport
+                                - australiaDrivingLicense
+                                - australiaBirthCertificate
+                                - australiaCentrelink
+                                - australiaCitizenshipCertificate
+                                - australiaVisa
+                                - australiaMedicare
+                                - australiaImmicard
+                                - australiaMarriageCertificate
+                                - australiaChangeOfNameCertificate
+                                - australiaElectoralRoll
+                                - newZealandPassport
+                                - newZealandDrivingLicense
+                                - newZealandBirthCertificate
+                                - newZealandCitizenshipCertificate
+                                - noneOfThese
+                            selected:
+                              type: string
+                              enum:
+                              - australiaPassport
+                              - australiaDrivingLicense
+                              - australiaBirthCertificate
+                              - australiaCentrelink
+                              - australiaCitizenshipCertificate
+                              - australiaVisa
+                              - australiaMedicare
+                              - australiaImmicard
+                              - australiaMarriageCertificate
+                              - australiaChangeOfNameCertificate
+                              - australiaElectoralRoll
+                              - newZealandPassport
+                              - newZealandDrivingLicense
+                              - newZealandBirthCertificate
+                              - newZealandCitizenshipCertificate
+                              - noneOfThese
+                        uid:
+                          type: string
+                    reviewers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          manualReview:
+                            type: object
+                            properties:
+                              decision:
+                                type: integer
+                                minimum: 0
+                                maximum: 9
+                                description: Ordinal decision outcome (0-9) submitted by the reviewer
+                              notes:
+                                type: string
+                                maxLength: 500
+                                description: Free-text justification or notes provided by the reviewer
+                            required:
+                            - decision
+                            additionalProperties: false
+                            description: 'Reviewer-supplied manual-review input: a required decision ordinal plus optional notes. Identity fields are Captain-populated and rejected here.'
+                        additionalProperties: false
+                        description: Caller-facing reviewer entry for a submit request.
+                      maxItems: 1
+                      description: Reviewer decisions for this submit. Single reviewer at v1 (max 1).
+                  required:
+                  - subject
+              required:
+              - instanceId
+              - interactionId
+              additionalProperties: {}
+      responses:
+        '200':
+          description: Submission accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InteractionSubmitResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: 'Conflict. Two distinct outcomes share this status and are told apart by the error code, NOT by the status: `4003/INVALID_FIELD` — every submitted domain element is present but invalid, so correcting the data and retrying can succeed; `4009/JOURNEY_NOT_ACTIVE` — the journey has already completed, failed or been abandoned, so retrying this request can never succeed and the client should start a new journey rather than offer a retry.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Too many requests for this journey instance (retry after Retry-After)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyInteractionSubmit
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /journey/interaction/asset/upload:
+    post:
+      tags:
+      - Interaction
+      summary: Stream an interaction asset to storage
+      description: 'Streams a raw asset body (application/octet-stream) to storage and returns its gofs key. Identifiers are passed as X-Instance-Id, X-Interaction-Id and X-Domain-Element-Id headers. Accepts capture elements: the encrypted selfie (EncryptedSelfie/selfieImage), the plain selfie (Selfie/selfieImage), and both document sides (PrimaryDocument/side1Image, PrimaryDocument/side2Image). An element the current deployment does not accept returns 422 — submit that asset inline (base64) in the interaction submit instead.'
+      security:
+      - CustomerAccess: []
+      - InteractionAccess: []
+      responses:
+        '200':
+          description: Asset stored; returns the gofs key to reference in the subsequent submit
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  domainElementId:
+                    type: string
+                  gofsKey:
+                    type: string
+                required:
+                - domainElementId
+                - gofsKey
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Element is not being collected by the current interaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Asset too large or unsupported element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Too many requests for this journey instance, or the element has been uploaded the maximum number of times for this journey (retry after Retry-After)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Asset storage unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyInteractionAssetUpload
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /journey/instance/{instanceId}/handoff-token:
+    post:
+      tags:
+      - Interaction
+      summary: Mint a fresh position-scoped handoff token
+      description: Mints a fresh page-mode delivery-token + connect-secret pair pointing at the same instance, stamped devicePosition=joined, so a second device can join. Device-token only, and only from the device that started the journey; customer tokens and already-joined devices are rejected with 403. Returns { instanceUrl, devicePosition, expiresIn }.
+      security:
+      - InteractionAccess: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+        required: true
+        name: instanceId
+        in: path
+      responses:
+        '201':
+          description: Fresh handoff token minted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandoffTokenResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden — caller is not the originating device (customer token or joined handoff device)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Instance not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable — connect-secret service or state store not wired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyInstanceByInstanceIdHandoffToken
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /journey/loqate/search:
+    post:
+      tags:
+      - Interaction
+      summary: Search addresses via Loqate Capture
+      description: Server-side proxy for the Loqate Capture Find endpoint. Returns address suggestions for a free-text query; the Loqate API key is held server-side and never reaches the browser.
+      security:
+      - CustomerAccess: []
+      - InteractionAccess: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instanceId:
+                  type: string
+                  minLength: 16
+                  maxLength: 64
+                  pattern: ^[A-Za-z0-9_-]+$
+                  description: Journey Instance Id, a unique identifier for a started journey instance.
+                text:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                containerId:
+                  type: string
+                  maxLength: 255
+                  pattern: ^[A-Za-z0-9|_.-]+$
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 25
+              required:
+              - instanceId
+              - text
+              additionalProperties: false
+      responses:
+        '200':
+          description: Loqate search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoqateSearchResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Instance not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable — Loqate API key not configured, upstream unreachable, upstream timed out, or upstream signalled an API-level error. Inspect the `problem` field for the specific cause.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyLoqateSearch
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /journey/loqate/retrieve:
+    post:
+      tags:
+      - Interaction
+      summary: Retrieve full address via Loqate Capture
+      description: Server-side proxy for the Loqate Capture Retrieve endpoint. Returns the full address detail for a given Loqate address ID.
+      security:
+      - CustomerAccess: []
+      - InteractionAccess: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instanceId:
+                  type: string
+                  minLength: 16
+                  maxLength: 64
+                  pattern: ^[A-Za-z0-9_-]+$
+                  description: Journey Instance Id, a unique identifier for a started journey instance.
+                addressId:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^[A-Za-z0-9|_.-]+$
+              required:
+              - instanceId
+              - addressId
+              additionalProperties: false
+      responses:
+        '200':
+          description: Loqate retrieve result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoqateRetrieveResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Instance not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable — Loqate API key not configured, upstream unreachable, upstream timed out, or upstream signalled an API-level error. Inspect the `problem` field for the specific cause.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyLoqateRetrieve
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/GbgError'
+          minItems: 1
+      required:
+      - errors
+    SlimIdentity:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          description: Title of an individual such as Mr, Mrs, Dr, Sir
+        firstName:
+          type: string
+          minLength: 1
+          description: A person's name used by their collegues and friends to address them
+        middleNames:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          description: Any other registered names used by the individual, not aliases
+        lastNames:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+          description: Any family names for the individual
+        lastNamesAtBirth:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+          description: Any family names for the individual
+        dateOfBirth:
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+        gender:
+          type: string
+          minLength: 1
+        currentAddress:
+          type: object
+          properties:
+            lines:
+              type: array
+              items:
+                type: string
+              description: Unformatted line based address
+            addressString:
+              type: string
+              description: The address as a single line
+            premise:
+              type: string
+              description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+            building:
+              type: string
+              description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+            subBuilding:
+              type: string
+              description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+            thoroughfare:
+              type: string
+              description: This field holds the most common street or block data element within a country. For instance, USA Street
+            dependentThoroughfare:
+              type: string
+              description: The name of a dependent street or block, such as a street within a complex.
+            locality:
+              type: string
+              description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+            dependentLocality:
+              type: string
+              description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+            doubleDependentLocality:
+              type: string
+              description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+            postalCode:
+              type: string
+              description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+            postBox:
+              type: string
+              description: This field contains the post box number associated with a particular delivery point, should one exist.
+            country:
+              type: string
+              pattern: ^[A-Z]{2,3}$
+              description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+            superAdministrativeArea:
+              type: string
+            administrativeArea:
+              type: string
+            subAdministrativeArea:
+              type: string
+            organization:
+              type: string
+            location:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                longitude:
+                  type: string
+                geoAccuracy:
+                  type: string
+                what3words:
+                  type: string
+                  description: A What3words designation associated with this location with '.' separator.
+        placeOfBirth:
+          type: object
+          properties:
+            lines:
+              type: array
+              items:
+                type: string
+              description: Unformatted line based address
+            addressString:
+              type: string
+              description: The address as a single line
+            premise:
+              type: string
+              description: The number identifying the property's delivery point on its street — "128", "30A", "8-12". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name.
+            building:
+              type: string
+              description: The name of the building, complex, or named property — "Landmark House", "The Shard". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty.
+            subBuilding:
+              type: string
+              description: The unit within the property, such as a flat, apartment or suite number — "FLAT 1", "SUITE 212".
+            thoroughfare:
+              type: string
+              description: This field holds the most common street or block data element within a country. For instance, USA Street
+            dependentThoroughfare:
+              type: string
+              description: The name of a dependent street or block, such as a street within a complex.
+            locality:
+              type: string
+              description: This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality
+            dependentLocality:
+              type: string
+              description: This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London.
+            doubleDependentLocality:
+              type: string
+              description: This is an even smaller area within a dependent locality, often used in very detailed addresses.
+            postalCode:
+              type: string
+              description: This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US
+            postBox:
+              type: string
+              description: This field contains the post box number associated with a particular delivery point, should one exist.
+            country:
+              type: string
+              pattern: ^[A-Z]{2,3}$
+              description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+            superAdministrativeArea:
+              type: string
+            administrativeArea:
+              type: string
+            subAdministrativeArea:
+              type: string
+            organization:
+              type: string
+            location:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                longitude:
+                  type: string
+                geoAccuracy:
+                  type: string
+                what3words:
+                  type: string
+                  description: A What3words designation associated with this location with '.' separator.
+        idNumbers:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: The type of phone number, such as landline, mobile, fax, unknown etc
+              idNumber:
+                type: string
+                minLength: 1
+                description: ID number eg, National Insurance Number in UK, Social Securtiy Number in US
+              country:
+                type: string
+                pattern: ^[A-Z]{2,3}$
+                description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+            required:
+            - type
+            - idNumber
+    SlimDocument:
+      type: object
+      properties:
+        type:
+          type: string
+        category:
+          type: string
+        subType:
+          type: string
+        format:
+          type: string
+        number:
+          type: string
+          minLength: 1
+        issueDate:
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+        expiryDate:
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          description: Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601
+        country:
+          type: string
+          pattern: ^[A-Z]{2,3}$
+          description: Country the address is in. It must be a valid ISO2 or ISO3 country code
+        classification:
+          type: object
+          properties:
+            ids:
+              type: array
+              items:
+                type: string
+            category:
+              type: string
+            type:
+              type: string
+            subtype:
+              type: string
+            isDoubleSided:
+              type: boolean
+            hasNFC:
+              type: boolean
+            year:
+              type: string
+            countryCode:
+              type: string
+            countryName:
+              type: string
+            stateCode:
+              type: string
+            stateName:
+              type: string
+            sides:
+              type: array
+              items:
+                type: object
+                properties:
+                  side:
+                    type: string
+                  id:
+                    type: string
+                  documentQuality:
+                    type: string
+                  documentQualityScore:
+                    type: number
+                required:
+                - side
+                - id
+                - documentQuality
+                - documentQualityScore
+        extraction:
+          $ref: '#/components/schemas/SlimExtraction'
+        validation:
+          $ref: '#/components/schemas/SlimValidation'
+    LoqateRetrieveResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+      - Items
+    SlimValidation:
+      type: object
+      properties:
+        validationChecks:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              title:
+                type: string
+              validationResult:
+                type: string
+              weight:
+                type: string
+              regionOfInterests:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    boundingBox:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                        y:
+                          type: number
+                        width:
+                          type: number
+                        height:
+                          type: number
+                      required:
+                      - x
+                      - y
+                      - width
+                      - height
+                    side:
+                      type: string
+                    spectrum:
+                      type: string
+                    imageId:
+                      type: string
+                  required:
+                  - side
+              type:
+                type: string
+            required:
+            - name
+            - title
+            - validationResult
+            - weight
+            - type
+        aggregatedValidationChecks:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              title:
+                type: string
+              validationResult:
+                type: string
+              weight:
+                type: string
+              regionOfInterests:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    boundingBox:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                        y:
+                          type: number
+                        width:
+                          type: number
+                        height:
+                          type: number
+                      required:
+                      - x
+                      - y
+                      - width
+                      - height
+                    side:
+                      type: string
+                    spectrum:
+                      type: string
+                    imageId:
+                      type: string
+                  required:
+                  - side
+              type:
+                type: string
+            required:
+            - name
+            - title
+            - validationResult
+            - weight
+            - type
+    HandoffTokenResponse:
+      type: object
+      properties:
+        instanceUrl:
+          type: string
+        devicePosition:
+          type: string
+          enum:
+          - origin
+          - joined
+        expiresIn:
+          type: number
+      required:
+      - instanceUrl
+      - devicePosition
+      - expiresIn
+    SlimResult:
+      type: object
+      properties:
+        outcome:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - complete
+          - error
+          - timeout
+          description: 'Headline result state, and the AUTHORITATIVE signal for whether the journey succeeded. `complete` means the journey finished. `error` means it ended in failure: either a module reported a terminal error, or the platform abandoned the journey before it could finish (a deadlock, an interaction or execution timeout, or a spin). Abandonment is reported as `error` rather than as a distinct value. `pending` is reported for a running journey once its state has materialized. `timeout` is part of this range but is not currently emitted at journey level — an elapsed deadline surfaces as `error`. When `status` disagrees with `outcome` or `outcomeClassification`, `status` wins: a journey can pass an evaluation and then fail before finishing, leaving a positive classification beside `status: "error"`. Both are true — the evaluation did pass — but the journey did not complete, so do not read a positive classification as success. Note also that an `error` caused by abandonment is generally NOT retryable — a deadlocked journey deadlocks again — even though the accompanying error advises a retry; start a new journey instead.'
+        outcomeClassification:
+          type:
+          - string
+          - 'null'
+          enum:
+          - positive
+          - negative
+          - neutral
+          - null
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/GbgError'
+          minItems: 1
+        data:
+          $ref: '#/components/schemas/SlimVerifiedData'
+    SlimInteractionFetchResponse:
+      type: object
+      properties:
+        instanceId:
+          type: string
+        interactionId:
+          type: string
+        journey:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - InProgress
+              - Completed
+              - Failed
+              - Paused
+          required:
+          - status
+        interaction:
+          type: object
+          additionalProperties: {}
+        processing:
+          type: boolean
+        outstanding:
+          type: array
+          items:
+            type: string
+        outstandingGroups:
+          type: array
+          items:
+            type: object
+            properties:
+              elementId:
+                type: string
+              cardinality:
+                type: string
+                enum:
+                - at-least-one
+              refs:
+                type: array
+                items:
+                  type: string
+            required:
+            - elementId
+            - cardinality
+            - refs
+        instructions:
+          type: array
+          items:
+            type: string
+        result:
+          $ref: '#/components/schemas/SlimResult'
+        joinedDevice:
+          type: object
+          properties:
+            connected:
+              type: boolean
+          required:
+          - connected
+      required:
+      - instanceId
+      - journey
+    SlimVerifiedData:
+      type: object
+      properties:
+        identity:
+          $ref: '#/components/schemas/SlimIdentity'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlimDocument'
+      description: 'Verified-output slice (OQ-A). May be transiently ABSENT on a journey already reporting `status: complete`: the certified view materializes just after the completion signal, so a client reading `data` the instant it sees `complete` may need to re-poll once. Absent `data` means "not yet available", not "no verified data". (Read-after-write closure tracked in GGO-16738.)'
+    InteractionSubmitResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+      required:
+      - status
+    SlimExtraction:
+      type: object
+      properties:
+        aggregatedFields:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+              source:
+                type: string
+              isNonLatin:
+                type: boolean
+              regionOfInterest:
+                type: object
+                properties:
+                  boundingBox:
+                    type: object
+                    properties:
+                      x:
+                        type: number
+                      y:
+                        type: number
+                      width:
+                        type: number
+                      height:
+                        type: number
+                    required:
+                    - x
+                    - y
+                    - width
+                    - height
+                  side:
+                    type: string
+                  spectrum:
+                    type: string
+                  imageId:
+                    type: string
+                required:
+                - side
+            required:
+            - label
+            - value
+            - source
+            - isNonLatin
+        extractedFields:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    label:
+                      type: string
+                    value:
+                      type: string
+                    source:
+                      type: string
+                    isNonLatin:
+                      type: boolean
+                    regionOfInterest:
+                      type: object
+                      properties:
+                        boundingBox:
+                          type: object
+                          properties:
+                            x:
+                              type: number
+                            y:
+                              type: number
+                            width:
+                              type: number
+                            height:
+                              type: number
+                          required:
+                          - x
+                          - y
+                          - width
+                          - height
+                        side:
+                          type: string
+                        spectrum:
+                          type: string
+                        imageId:
+                          type: string
+                      required:
+                      - side
+                  required:
+                  - label
+                  - value
+                  - source
+                  - isNonLatin
+            required:
+            - label
+            - details
+    InteractionFetchResponse:
+      type: object
+      properties:
+        instanceId:
+          type: string
+        interactionId:
+          type: string
+        journey:
+          type: object
+          properties:
+            status:
+              type: string
+          required:
+          - status
+        interaction:
+          type: object
+          additionalProperties: {}
+        context:
+          type: object
+          additionalProperties: {}
+        instructions: {}
+        outstanding: {}
+        outstandingGroups:
+          type: array
+          items:
+            type: object
+            properties:
+              elementId:
+                type: string
+              cardinality:
+                type: string
+                enum:
+                - at-least-one
+              refs:
+                type: array
+                items:
+                  type: string
+            required:
+            - elementId
+            - cardinality
+            - refs
+        processing:
+          type: boolean
+        result:
+          type: object
+          additionalProperties: {}
+        joinedDevice:
+          type: object
+          properties:
+            connected:
+              type: boolean
+          required:
+          - connected
+      required:
+      - instanceId
+      - journey
+    LoqateSearchResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+      - Items
+    GbgError:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: ^\d{4}$
+        name:
+          type: string
+          minLength: 1
+        problem:
+          type: string
+          minLength: 1
+        action:
+          type: string
+          minLength: 1
+        location:
+          type: string
+          enum:
+          - Path
+          - Authorization
+          - Header
+          - Query String
+          - Request
+          - Body
+          - Service
+          - Flow
+      required:
+      - code
+      - name
+      - problem
+      - action
+  securitySchemes:
+    CustomerAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Customer JWT token for journey lifecycle operations. Required for: journey/start, journey/state/fetch, device/start'
+    InteractionAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'End-User JWT token for end-user scoped operations. Required for: interaction/fetch, interaction/submit, device/validate'
+x-refined-from:
+- gbg-go-v2-openapi.json
+- gbg-go-v2-openapi.yml

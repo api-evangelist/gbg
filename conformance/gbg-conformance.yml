@@ -1,0 +1,34 @@
+generated: '2026-10-18'
+method: derived
+source: openapi/gbg-go-v2-openapi.yml
+standards:
+- id: openapi
+  conforms: true
+  evidence: OpenAPI 3.1.0 specification
+- id: oauth2
+  conforms: true
+  evidence: Uses OAuth2 bearer tokens for authentication (CustomerAccess and InteractionAccess security schemes)
+- id: bearer-auth
+  conforms: true
+  evidence: HTTP bearer authentication with JWT tokens
+- id: json-api
+  conforms: true
+  evidence: API uses JSON for request/response bodies
+- id: problem-json
+  conforms: false
+  evidence: Error responses use custom error format, not RFC 9457 problem+json
+- id: pagination
+  conforms: false
+  evidence: No pagination patterns found in API specification
+- id: idempotency
+  conforms: false
+  evidence: No idempotency mechanisms documented
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.3
+- id: openapi-3.1
+  conforms: true
+  evidence: the document declares 3.1.0
+- id: rfc9457
+  conforms: false
+  evidence: no response declares application/problem+json

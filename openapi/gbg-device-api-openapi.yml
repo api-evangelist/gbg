@@ -1,0 +1,346 @@
+openapi: 3.2.0
+info:
+  title: Gbg Device API
+  version: 2.0.0
+  license:
+    name: MIT
+  description: 'Operations tagged Device across 2 of this provider''s published API definitions: gbg-go-v2-openapi.json, gbg-go-v2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eu.platform.go.gbgplc.com/v2/captain/
+- url: https://us.platform.go.gbgplc.com/v2/captain/
+- url: https://au.platform.go.gbgplc.com/v2/captain/
+- url: https://api.auth.gbgplc.com/as/token.oauth2
+security: []
+tags:
+- name: Device
+paths:
+  /journey/device/start:
+    post:
+      tags:
+      - Device
+      summary: Generate connect token
+      description: Generates a one-time connect token for device onboarding.
+      security:
+      - CustomerAccess: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instanceId:
+                  type: string
+                  minLength: 16
+                  maxLength: 64
+                  pattern: ^[A-Za-z0-9_-]+$
+                  description: Journey Instance Id, a unique identifier for a started journey instance.
+                scope:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - mobile
+                    - desktop
+                    - '*'
+                    - any
+                    - ''
+              required:
+              - instanceId
+              additionalProperties: {}
+      responses:
+        '201':
+          description: Connect token created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceStartResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Cross-org access forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Journey not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyDeviceStart
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /journey/device/connect:
+    post:
+      tags:
+      - Device
+      summary: Complete the device-onboarding handshake
+      description: Completes the device-onboarding handshake. See partner integration guide.
+      security: []
+      responses:
+        '201':
+          description: End-user token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceConnectResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid connect secret
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyDeviceConnect
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /journey/device/refresh:
+    post:
+      tags:
+      - Device
+      summary: Renew a device session
+      description: Renews a device session. See partner integration guide.
+      security: []
+      responses:
+        '201':
+          description: Session renewed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceRefreshResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyDeviceRefresh
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /journey/device/validate:
+    post:
+      tags:
+      - Device
+      summary: Validate end-user session
+      description: Validates an end-user JWT and returns session information.
+      security:
+      - InteractionAccess: []
+      responses:
+        '200':
+          description: Session valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceValidateResponse'
+        '401':
+          description: Invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postJourneyDeviceValidate
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/GbgError'
+          minItems: 1
+      required:
+      - errors
+    DeviceRefreshResponse:
+      type: object
+      properties:
+        endUserToken:
+          type: string
+        expiresIn:
+          type: number
+        instanceId:
+          type: string
+        resumeCredential:
+          type: string
+        credentialExpiresAt:
+          type: string
+        credentialExpiresIn:
+          type: number
+        linkExpiresAt:
+          type: string
+      required:
+      - endUserToken
+      - expiresIn
+      - instanceId
+      - resumeCredential
+      - credentialExpiresAt
+      - credentialExpiresIn
+      - linkExpiresAt
+    DeviceStartResponse:
+      type: object
+      properties:
+        connectToken:
+          type: string
+        tokenType:
+          type: string
+          enum:
+          - connect
+        expiresIn:
+          type: number
+        scope:
+          type: array
+          items:
+            type: string
+      required:
+      - connectToken
+      - tokenType
+      - expiresIn
+      - scope
+    DeviceValidateResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          enum:
+          - true
+        sessionId:
+          type: string
+        instanceId:
+          type: string
+        orgId:
+          type: string
+        expiresAt:
+          type: string
+      required:
+      - valid
+      - sessionId
+      - instanceId
+      - orgId
+      - expiresAt
+    GbgError:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: ^\d{4}$
+        name:
+          type: string
+          minLength: 1
+        problem:
+          type: string
+          minLength: 1
+        action:
+          type: string
+          minLength: 1
+        location:
+          type: string
+          enum:
+          - Path
+          - Authorization
+          - Header
+          - Query String
+          - Request
+          - Body
+          - Service
+          - Flow
+      required:
+      - code
+      - name
+      - problem
+      - action
+    DeviceConnectResponse:
+      type: object
+      properties:
+        endUserToken:
+          type: string
+        tokenType:
+          type: string
+          enum:
+          - end_user
+        expiresIn:
+          type: number
+        instanceId:
+          type: string
+        resumeCredential:
+          type: string
+        credentialExpiresAt:
+          type: string
+        credentialExpiresIn:
+          type: number
+      required:
+      - endUserToken
+      - tokenType
+      - expiresIn
+      - instanceId
+  securitySchemes:
+    CustomerAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Customer JWT token for journey lifecycle operations. Required for: journey/start, journey/state/fetch, device/start'
+    InteractionAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'End-User JWT token for end-user scoped operations. Required for: interaction/fetch, interaction/submit, device/validate'
+x-refined-from:
+- gbg-go-v2-openapi.json
+- gbg-go-v2-openapi.yml

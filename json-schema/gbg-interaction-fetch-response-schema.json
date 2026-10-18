@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/gbg/main/json-schema/gbg-interaction-fetch-response-schema.json",
+  "title": "InteractionFetchResponse",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/gbg-go-v2-openapi.yml#/components/schemas/InteractionFetchResponse",
+  "type": "object",
+  "properties": {
+    "instanceId": {
+      "type": "string"
+    },
+    "interactionId": {
+      "type": "string"
+    },
+    "journey": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "interaction": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "instructions": {},
+    "outstanding": {},
+    "outstandingGroups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "elementId": {
+            "type": "string"
+          },
+          "cardinality": {
+            "type": "string",
+            "enum": [
+              "at-least-one"
+            ]
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "elementId",
+          "cardinality",
+          "refs"
+        ]
+      }
+    },
+    "processing": {
+      "type": "boolean"
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "joinedDevice": {
+      "type": "object",
+      "properties": {
+        "connected": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "connected"
+      ]
+    }
+  },
+  "required": [
+    "instanceId",
+    "journey"
+  ]
+}

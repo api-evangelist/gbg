@@ -1,0 +1,531 @@
+openapi: 3.2.0
+info:
+  title: Gbg Sandbox API
+  version: 2.0.0
+  license:
+    name: MIT
+  description: 'Operations tagged Sandbox across 2 of this provider''s published API definitions: gbg-go-v2-openapi.json, gbg-go-v2-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eu.platform.go.gbgplc.com/v2/captain/
+- url: https://us.platform.go.gbgplc.com/v2/captain/
+- url: https://au.platform.go.gbgplc.com/v2/captain/
+- url: https://api.auth.gbgplc.com/as/token.oauth2
+security: []
+tags:
+- name: Sandbox
+paths:
+  /sandbox/journeys/{journeyId}/scenarios:
+    post:
+      tags:
+      - Sandbox
+      summary: Create a sandbox scenario on a journey
+      description: Creates an org-tier sandbox scenario belonging to the journey in the path. Returns 409 if the name is taken on that journey (the same name may exist on other journeys). The scenario is resolvable at journey-start, for runs of that journey only, via the x-gbg-scenario header. Org is taken from the token.
+      security:
+      - CustomerAccess: []
+      parameters:
+      - schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,128}$
+          example: onboarding-journey
+          description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        required: true
+        description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        name: journeyId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSandboxScenarioRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SandboxScenarioWritten'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Scenario already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Sandbox scenario management unavailable — either not enabled on this deployment, or a transient storage failure. Retryable; see the Retry-After header on storage failures.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postSandboxJourneysByJourneyIdScenarios
+      x-operation-id-source: derived
+    get:
+      tags:
+      - Sandbox
+      summary: List a journey's sandbox scenarios
+      description: Lists the org's sandbox scenarios belonging to the journey in the path — never another journey's. Pass includePlatform=true to also return read-only GBG-provided platform scenarios (available on every journey); an org scenario shadows a platform scenario of the same name.
+      security:
+      - CustomerAccess: []
+      parameters:
+      - schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,128}$
+          example: onboarding-journey
+          description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        required: true
+        description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        name: journeyId
+        in: path
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          description: Include read-only platform-tier scenarios in the listing. Defaults to false.
+        required: false
+        description: Include read-only platform-tier scenarios in the listing. Defaults to false.
+        name: includePlatform
+        in: query
+      responses:
+        '200':
+          description: Scenario list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SandboxScenarioList'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Sandbox scenario management unavailable — either not enabled on this deployment, or a transient storage failure. Retryable; see the Retry-After header on storage failures.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getSandboxJourneysByJourneyIdScenarios
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+  /sandbox/journeys/{journeyId}/scenarios/{name}:
+    get:
+      tags:
+      - Sandbox
+      summary: Read a sandbox scenario
+      description: Reads one org-tier sandbox scenario of the journey in the path. By default does not fall back to the platform tier or to another journey, so a name that exists only at platform level, or only on another journey, returns 404. Pass includePlatform=true to fall back to the read-only GBG-provided scenario of that name; the response `tier` says which tier served it. Another journey is never consulted either way.
+      security:
+      - CustomerAccess: []
+      parameters:
+      - schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,128}$
+          example: onboarding-journey
+          description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        required: true
+        description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        name: journeyId
+        in: path
+      - schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,64}$
+          example: my-scenario
+          description: Scenario identifier, unique per journey (GGO-18332). The same name may exist on other journeys of the org with different content.
+        required: true
+        description: Scenario identifier, unique per journey (GGO-18332). The same name may exist on other journeys of the org with different content.
+        name: name
+        in: path
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          description: Fall back to the read-only platform tier when this journey holds no scenario of this name. Defaults to false, which reads this journey&apos;s org tier only.
+        required: false
+        description: Fall back to the read-only platform tier when this journey holds no scenario of this name. Defaults to false, which reads this journey&apos;s org tier only.
+        name: includePlatform
+        in: query
+      responses:
+        '200':
+          description: Scenario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SandboxScenario'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scenario not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Sandbox scenario management unavailable — either not enabled on this deployment, or a transient storage failure. Retryable; see the Retry-After header on storage failures.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getSandboxJourneysByJourneyIdScenariosByName
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Sandbox
+      summary: Replace a sandbox scenario
+      description: Replaces an existing org-tier sandbox scenario of the journey in the path. Returns 404 if it does not exist on that journey — use POST to create. Requires UPDATE:journey; creating (POST) requires CREATE:journey, so an edit-only grant cannot mint new scenarios through this endpoint.
+      security:
+      - CustomerAccess: []
+      parameters:
+      - schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,128}$
+          example: onboarding-journey
+          description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        required: true
+        description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        name: journeyId
+        in: path
+      - schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,64}$
+          example: my-scenario
+          description: Scenario identifier, unique per journey (GGO-18332). The same name may exist on other journeys of the org with different content.
+        required: true
+        description: Scenario identifier, unique per journey (GGO-18332). The same name may exist on other journeys of the org with different content.
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSandboxScenarioRequest'
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SandboxScenarioWritten'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scenario not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Sandbox scenario management unavailable — either not enabled on this deployment, or a transient storage failure. Retryable; see the Retry-After header on storage failures.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: putSandboxJourneysByJourneyIdScenariosByName
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Sandbox
+      summary: Delete a sandbox scenario
+      description: 'Deletes an org-tier sandbox scenario of the journey in the path by archiving it: it disappears from listings and journey-start resolution, but its version history is retained and creating the same name again restores it. A platform scenario of the same name, previously shadowed by this one on this journey, becomes resolvable again at journey-start.'
+      security:
+      - CustomerAccess: []
+      parameters:
+      - schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,128}$
+          example: onboarding-journey
+          description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        required: true
+        description: Id of the journey the scenario belongs to. Scenarios are listed, read and resolved per journey.
+        name: journeyId
+        in: path
+      - schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,64}$
+          example: my-scenario
+          description: Scenario identifier, unique per journey (GGO-18332). The same name may exist on other journeys of the org with different content.
+        required: true
+        description: Scenario identifier, unique per journey (GGO-18332). The same name may exist on other journeys of the org with different content.
+        name: name
+        in: path
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Scenario not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Sandbox scenario management unavailable — either not enabled on this deployment, or a transient storage failure. Retryable; see the Retry-After header on storage failures.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: deleteSandboxJourneysByJourneyIdScenariosByName
+      x-operation-id-source: derived
+    servers:
+    - url: https://eu.platform.go.gbgplc.com/v2/captain/
+    - url: https://us.platform.go.gbgplc.com/v2/captain/
+    - url: https://au.platform.go.gbgplc.com/v2/captain/
+    - url: https://api.auth.gbgplc.com/as/token.oauth2
+components:
+  schemas:
+    SandboxScenarioSummary:
+      type: object
+      properties:
+        name:
+          type: string
+        tier:
+          type: string
+          enum:
+          - platform
+          - org
+        editable:
+          type: boolean
+        description:
+          type: string
+        lastModifiedTime:
+          type: string
+          format: date-time
+          description: When the scenario was last saved (ISO 8601).
+        lastModifiedBy:
+          type: string
+          description: Principal (JWT sub) who last saved the scenario.
+          example: user-123
+      required:
+      - name
+      - tier
+      - editable
+    SandboxScenario:
+      type: object
+      properties:
+        name:
+          type: string
+        journeyId:
+          type: string
+        tier:
+          type: string
+          enum:
+          - platform
+          - org
+        data:
+          type: object
+          additionalProperties: {}
+        lastModifiedTime:
+          type: string
+          format: date-time
+          description: When the scenario was last saved (ISO 8601).
+        lastModifiedBy:
+          type: string
+          description: Principal (JWT sub) who last saved the scenario.
+          example: user-123
+      required:
+      - name
+      - journeyId
+      - tier
+      - data
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/GbgError'
+          minItems: 1
+      required:
+      - errors
+    CreateSandboxScenarioRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{1,64}$
+          example: my-scenario
+          description: Scenario identifier, unique per journey (GGO-18332). The same name may exist on other journeys of the org with different content.
+        data:
+          type: object
+          minProperties: 1
+          description: Scenario payload (ScenarioPayload). Requires `modules`; optionally `defaultOutcome`, `description`, and extra passthrough fields. Validated by the store against the same schema the sandbox runtime enforces, so an accepted document is guaranteed runnable.
+          example:
+            description: Fraud flagged on the second module
+            modules:
+              idVerification:
+                outcome: Pass
+                subject: {}
+              fraudCheck:
+                outcome: Flag
+                subject: {}
+            defaultOutcome: Complete
+      required:
+      - name
+      - data
+      additionalProperties: false
+    SandboxScenarioWritten:
+      type: object
+      properties:
+        name:
+          type: string
+        journeyId:
+          type: string
+        tier:
+          type: string
+          enum:
+          - org
+      required:
+      - name
+      - journeyId
+      - tier
+    SandboxScenarioList:
+      type: array
+      items:
+        $ref: '#/components/schemas/SandboxScenarioSummary'
+    GbgError:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: ^\d{4}$
+        name:
+          type: string
+          minLength: 1
+        problem:
+          type: string
+          minLength: 1
+        action:
+          type: string
+          minLength: 1
+        location:
+          type: string
+          enum:
+          - Path
+          - Authorization
+          - Header
+          - Query String
+          - Request
+          - Body
+          - Service
+          - Flow
+      required:
+      - code
+      - name
+      - problem
+      - action
+    UpdateSandboxScenarioRequest:
+      type: object
+      properties:
+        data:
+          type: object
+          minProperties: 1
+          description: Scenario payload (ScenarioPayload). Requires `modules`; optionally `defaultOutcome`, `description`, and extra passthrough fields. Validated by the store against the same schema the sandbox runtime enforces, so an accepted document is guaranteed runnable.
+          example:
+            description: Fraud flagged on the second module
+            modules:
+              idVerification:
+                outcome: Pass
+                subject: {}
+              fraudCheck:
+                outcome: Flag
+                subject: {}
+            defaultOutcome: Complete
+      required:
+      - data
+      additionalProperties: false
+  securitySchemes:
+    CustomerAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Customer JWT token for journey lifecycle operations. Required for: journey/start, journey/state/fetch, device/start'
+    InteractionAccess:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'End-User JWT token for end-user scoped operations. Required for: interaction/fetch, interaction/submit, device/validate'
+x-refined-from:
+- gbg-go-v2-openapi.json
+- gbg-go-v2-openapi.yml

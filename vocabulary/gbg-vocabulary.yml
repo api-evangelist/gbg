@@ -1,0 +1,212 @@
+generated: '2026-10-18'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/gbg-go-v1-openapi.yml
+- openapi/gbg-go-v2-openapi.yml
+vocabulary:
+  name: GBG Domain Vocabulary
+  description: 'Terms declared by GBG''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions. Derived,
+    not authored.'
+  version: '2026-10-18'
+  terms:
+  - term: JourneyStartResponse
+    definition: 'Object declared by the contract with fields: instanceId, instanceUrl, status, message, state.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/JourneyStartResponse
+  - term: StateFetchResponse
+    definition: 'Object declared by the contract with fields: instanceId, status, context, result.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/StateFetchResponse
+  - term: ErrorResponse
+    definition: 'Object declared by the contract with fields: errors.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/ErrorResponse
+  - term: GbgError
+    definition: 'Object declared by the contract with fields: code, name, problem, action, location.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/GbgError
+  - term: InteractionFetchResponse
+    definition: 'Object declared by the contract with fields: instanceId, interactionId, journey, interaction, context, instructions, outstanding,
+      outstandingGroups, processing, result, joinedDevice.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/InteractionFetchResponse
+  - term: SlimInteractionFetchResponse
+    definition: 'Object declared by the contract with fields: instanceId, interactionId, journey, interaction, processing, outstanding, outstandingGroups,
+      instructions, result, joinedDevice.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimInteractionFetchResponse
+  - term: SlimResult
+    definition: 'Object declared by the contract with fields: outcome, status, outcomeClassification, errors, data.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimResult
+  - term: SlimVerifiedData
+    definition: 'Verified-output slice (OQ-A). May be transiently ABSENT on a journey already reporting `status: complete`: the certified view
+      materializes just after the completion signal, so a client reading `data` the instant it sees `complete` may need to re-poll once. Absent
+      `data` means "not yet available", not "no verified data". (Read-after-write closure tracked in GGO-16738.)'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimVerifiedData
+  - term: SlimIdentity
+    definition: 'Object declared by the contract with fields: title, firstName, middleNames, lastNames, lastNamesAtBirth, dateOfBirth, gender,
+      currentAddress, placeOfBirth, idNumbers.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimIdentity
+  - term: SlimDocument
+    definition: 'Object declared by the contract with fields: type, category, subType, format, number, issueDate, expiryDate, country, classification,
+      extraction, validation.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimDocument
+  - term: SlimExtraction
+    definition: 'Object declared by the contract with fields: aggregatedFields, extractedFields.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimExtraction
+  - term: SlimValidation
+    definition: 'Object declared by the contract with fields: validationChecks, aggregatedValidationChecks.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimValidation
+  - term: InteractionSubmitResponse
+    definition: 'Object declared by the contract with fields: status.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/InteractionSubmitResponse
+  - term: HandoffTokenResponse
+    definition: 'Object declared by the contract with fields: instanceUrl, devicePosition, expiresIn.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/HandoffTokenResponse
+  - term: LoqateSearchResponse
+    definition: 'Object declared by the contract with fields: Items.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/LoqateSearchResponse
+  - term: LoqateRetrieveResponse
+    definition: 'Object declared by the contract with fields: Items.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/LoqateRetrieveResponse
+  - term: SlimStateFetchResponse
+    definition: 'Object declared by the contract with fields: instanceId, status, journey, steps, result.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimStateFetchResponse
+  - term: SlimJourney
+    definition: 'Object declared by the contract with fields: id, name, version, startedAt, endedAt.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimJourney
+  - term: SlimStep
+    definition: 'Object declared by the contract with fields: nodeId, name, outcome, outcomeClassification.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimStep
+  - term: SchemaFetchResponse
+    definition: 'Object declared by the contract with fields: deliveryId, resolvedVersion, schemas.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SchemaFetchResponse
+  - term: TerminateResponse
+    definition: 'Object declared by the contract with fields: instanceId.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/TerminateResponse
+  - term: DeleteResponse
+    definition: 'Object declared by the contract with fields: instanceId, status, message.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/DeleteResponse
+  - term: DeviceStartResponse
+    definition: 'Object declared by the contract with fields: connectToken, tokenType, expiresIn, scope.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/DeviceStartResponse
+  - term: DeviceConnectResponse
+    definition: 'Object declared by the contract with fields: endUserToken, tokenType, expiresIn, instanceId, resumeCredential, credentialExpiresAt,
+      credentialExpiresIn.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/DeviceConnectResponse
+  - term: DeviceRefreshResponse
+    definition: 'Object declared by the contract with fields: endUserToken, expiresIn, instanceId, resumeCredential, credentialExpiresAt, credentialExpiresIn,
+      linkExpiresAt.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/DeviceRefreshResponse
+  - term: DeviceValidateResponse
+    definition: 'Object declared by the contract with fields: valid, sessionId, instanceId, orgId, expiresAt.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/DeviceValidateResponse
+  - term: SandboxScenarioWritten
+    definition: 'Object declared by the contract with fields: name, journeyId, tier.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SandboxScenarioWritten
+  - term: CreateSandboxScenarioRequest
+    definition: 'Object declared by the contract with fields: name, data.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/CreateSandboxScenarioRequest
+  - term: SandboxScenarioSummary
+    definition: 'Object declared by the contract with fields: name, tier, editable, description, lastModifiedTime, lastModifiedBy.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SandboxScenarioSummary
+  - term: SandboxScenario
+    definition: 'Object declared by the contract with fields: name, journeyId, tier, data, lastModifiedTime, lastModifiedBy.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/SandboxScenario
+  - term: UpdateSandboxScenarioRequest
+    definition: 'Object declared by the contract with fields: data.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/UpdateSandboxScenarioRequest
+  - term: PasswordGrantRequest
+    definition: 'Object declared by the contract with fields: client_id, client_secret, username, password, grant_type.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/PasswordGrantRequest
+  - term: ClientCredentialsGrantRequest
+    definition: 'Object declared by the contract with fields: client_id, client_secret, grant_type, scope.'
+    tags:
+    - Object
+    source: openapi/gbg-go-v2-openapi.yml#/components/schemas/ClientCredentialsGrantRequest
+  - term: Journey
+    definition: 'Resource group in the contract; its operation POST /journey/start: Creates a new journey instance from a resource definition.'
+    tags:
+    - Resource Group
+    source: openapi/gbg-go-v2-openapi.yml
+  - term: Interaction
+    definition: 'Resource group in the contract; its operation POST /journey/interaction/fetch: Retrieves the current interaction state for a
+      journey instance.'
+    tags:
+    - Resource Group
+    source: openapi/gbg-go-v2-openapi.yml
+  - term: Device
+    definition: 'Resource group in the contract; its operation POST /journey/device/start: Generates a one-time connect token for device onboarding.'
+    tags:
+    - Resource Group
+    source: openapi/gbg-go-v2-openapi.yml
+  - term: Sandbox
+    definition: 'Resource group in the contract; its operation POST /sandbox/journeys/{journeyId}/scenarios: Creates an org-tier sandbox scenario
+      belonging to the journey in the path.'
+    tags:
+    - Resource Group
+    source: openapi/gbg-go-v2-openapi.yml
+  - term: Authentication
+    definition: 'Resource group in the contract; its operation POST /as/token.oauth2: Get an access token to authenticate API requests.'
+    tags:
+    - Resource Group
+    source: openapi/gbg-go-v2-openapi.yml

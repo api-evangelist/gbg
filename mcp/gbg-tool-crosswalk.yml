@@ -1,0 +1,30 @@
+name: GBG Go MCP tool crosswalk
+type: ToolCrosswalk
+generated: '2026-10-18'
+method: derived
+source: >-
+  Derived from the live tools/list of https://docs.go.gbgplc.com/mcp (probed 2026-10-18, see
+  mcp/gbg-mcp.yml) against openapi/gbg-go-v1-openapi.yml and openapi/gbg-go-v2-openapi.yml.
+finding: >-
+  Empty crosswalk is the finding: GBG's only MCP server is a documentation server and none of its tools
+  invokes a GBG Go REST operation. The REST specs also declare no operationIds, so rest_only rows are
+  identified by METHOD + path.
+surfaces:
+  rest_openapi: [openapi/gbg-go-v1-openapi.yml, openapi/gbg-go-v2-openapi.yml]
+  graphql: null
+  mcp: https://docs.go.gbgplc.com/mcp
+  gated: none (MCP tools/list answered without credentials; REST API requires OAuth2 client-credentials token)
+crosswalk: []
+mcp_only:
+  - {tool: search_gbg_documentation, reason: Documentation search; no REST counterpart in the GBG Go API.}
+  - {tool: query_docs_filesystem_gbg_documentation, reason: Read-only query over a virtual docs/OpenAPI filesystem; no REST counterpart.}
+  - {tool: submit_feedback, reason: Documentation feedback; no REST counterpart in the GBG Go API.}
+rest_only:
+  - {spec: openapi/gbg-go-v2-openapi.yml, operations: ["POST /journey/start", "POST /journey/interaction/fetch", "POST /journey/interaction/submit", "POST /journey/interaction/asset/upload", "POST /journey/instance/{instanceId}/handoff-token", "POST /journey/loqate/search", "POST /journey/loqate/retrieve", "POST /journey/state/fetch", "POST /journey/schema/fetch", "POST /journey/task/schema", "POST /journey/terminate", "POST /journey/state/delete", "POST /journey/device/start", "POST /journey/device/connect", "POST /journey/device/refresh", "POST /journey/device/validate", "POST /sandbox/journeys/{journeyId}/scenarios", "GET /sandbox/journeys/{journeyId}/scenarios", "GET /sandbox/journeys/{journeyId}/scenarios/{name}", "PUT /sandbox/journeys/{journeyId}/scenarios/{name}", "DELETE /sandbox/journeys/{journeyId}/scenarios/{name}", "POST /as/token.oauth2"]}
+  - {spec: openapi/gbg-go-v1-openapi.yml, operations: ["POST /as/token.oauth2", "POST /journey/start", "POST /journey/task/list", "POST /journey/task/list/schema", "POST /journey/task/schema", "POST /journey/task/update", "POST /journey/state/fetch"]}
+coverage:
+  mcp_tools: 3
+  bound: 0
+  mcp_only: 3
+  rest_operations: 29
+  rest_only: 29

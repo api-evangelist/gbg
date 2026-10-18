@@ -1,0 +1,129 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for GBG Go API v2
+  version: 1.0.0
+extends: ../openapi/_original/gbg-go-v2-openapi.yml
+x-generated: '2026-10-18'
+x-method: generated
+x-source: openapi/gbg-go-v2-openapi.yml
+x-rationale: 'The published GBG Go OpenAPI declares no operationIds. This overlay adds them without mutating the original: names come verbatim
+  from the provider''s own core SDK spec (openapi/_original/gbg-go-core-sdk-spec.yaml) where that spec declares the same method+path, and are
+  otherwise generated from the summary and marked x-operationId-origin: generated. It also links the provider-published MCP server, llms.txt and
+  agent skill.'
+actions:
+- target: $.paths['/journey/start'].post
+  description: Add operationId startJourney (Start a new journey)
+  update:
+    operationId: startJourney
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/interaction/fetch'].post
+  description: Add operationId fetchInteraction (Fetch current interaction)
+  update:
+    operationId: fetchInteraction
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/interaction/submit'].post
+  description: Add operationId submitInteraction (Submit interaction data)
+  update:
+    operationId: submitInteraction
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/interaction/asset/upload'].post
+  description: Add operationId uploadInteractionAsset (Stream an interaction asset to storage)
+  update:
+    operationId: uploadInteractionAsset
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/journey/instance/{instanceId}/handoff-token'].post
+  description: Add operationId createHandoffToken (Mint a fresh position-scoped handoff token)
+  update:
+    operationId: createHandoffToken
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/journey/loqate/search'].post
+  description: Add operationId searchLoqateAddresses (Search addresses via Loqate Capture)
+  update:
+    operationId: searchLoqateAddresses
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/journey/loqate/retrieve'].post
+  description: Add operationId retrieveLoqateAddress (Retrieve full address via Loqate Capture)
+  update:
+    operationId: retrieveLoqateAddress
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/journey/state/fetch'].post
+  description: Add operationId getJourneyState (Fetch journey state)
+  update:
+    operationId: getJourneyState
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/schema/fetch'].post
+  description: Add operationId fetchInteractionSchemas (Fetch interaction JSON schemas)
+  update:
+    operationId: fetchInteractionSchemas
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/journey/task/schema'].post
+  description: Add operationId getTaskSchema (Fetch V1-compat task schema)
+  update:
+    operationId: getTaskSchema
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/terminate'].post
+  description: Add operationId terminateJourney (Terminate journey)
+  update:
+    operationId: terminateJourney
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/journey/state/delete'].post
+  description: Add operationId deleteInstance (Delete journey state)
+  update:
+    operationId: deleteInstance
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/device/start'].post
+  description: Add operationId addDevice (Generate connect token)
+  update:
+    operationId: addDevice
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/device/connect'].post
+  description: Add operationId deviceConnect (Complete the device-onboarding handshake)
+  update:
+    operationId: deviceConnect
+    x-operationId-origin: 'provider: declared verbatim in openapi/_original/gbg-go-core-sdk-spec.yaml'
+- target: $.paths['/journey/device/refresh'].post
+  description: Add operationId refreshDevice (Renew a device session)
+  update:
+    operationId: refreshDevice
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/journey/device/validate'].post
+  description: Add operationId validateDevice (Validate end-user session)
+  update:
+    operationId: validateDevice
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/sandbox/journeys/{journeyId}/scenarios'].post
+  description: Add operationId createSandboxScenario (Create a sandbox scenario on a journey)
+  update:
+    operationId: createSandboxScenario
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/sandbox/journeys/{journeyId}/scenarios'].get
+  description: Add operationId listSandboxScenarios (List a journey's sandbox scenarios)
+  update:
+    operationId: listSandboxScenarios
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/sandbox/journeys/{journeyId}/scenarios/{name}'].get
+  description: Add operationId getSandboxScenario (Read a sandbox scenario)
+  update:
+    operationId: getSandboxScenario
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/sandbox/journeys/{journeyId}/scenarios/{name}'].put
+  description: Add operationId replaceSandboxScenario (Replace a sandbox scenario)
+  update:
+    operationId: replaceSandboxScenario
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/sandbox/journeys/{journeyId}/scenarios/{name}'].delete
+  description: Add operationId deleteSandboxScenario (Delete a sandbox scenario)
+  update:
+    operationId: deleteSandboxScenario
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.paths['/as/token.oauth2'].post
+  description: Add operationId generateAccessToken (Generate access token)
+  update:
+    operationId: generateAccessToken
+    x-operationId-origin: 'generated: API Evangelist name derived from the operation summary; the provider declares none'
+- target: $.info
+  description: Point agents at the provider-published agent surfaces.
+  update:
+    x-mcp-server: https://docs.go.gbgplc.com/mcp
+    x-llms-txt: https://docs.go.gbgplc.com/llms.txt
+    x-agent-skill: https://docs.go.gbgplc.com/.well-known/agent-skills/gbg/skill.md

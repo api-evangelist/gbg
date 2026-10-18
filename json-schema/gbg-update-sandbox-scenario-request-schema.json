@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/gbg/main/json-schema/gbg-update-sandbox-scenario-request-schema.json",
+  "title": "UpdateSandboxScenarioRequest",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/gbg-go-v2-openapi.yml#/components/schemas/UpdateSandboxScenarioRequest",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "Scenario payload (ScenarioPayload). Requires `modules`; optionally `defaultOutcome`, `description`, and extra passthrough fields. Validated by the store against the same schema the sandbox runtime enforces, so an accepted document is guaranteed runnable."
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "additionalProperties": false
+}

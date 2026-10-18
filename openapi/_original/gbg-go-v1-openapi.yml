@@ -1,0 +1,605 @@
+# x-archived-from: gbg-go-v1-openapi.yml
+# x-archived-on: 2026-10-18
+openapi: 3.0.3
+x-mintlify:
+  version: v1
+info:
+  title: GBG GO API Reference
+  description: The GBG GO API enables authentication, customer journey execution, task management, and tracking verification progress.
+  version: 1.0.0
+  license:
+    name: MIT
+servers:
+- url: https://eu.platform.go.gbgplc.com/captain/api
+- url: https://us.platform.go.gbgplc.com/captain/api
+- url: https://au.platform.go.gbgplc.com/captain/api
+- url: https://api.auth.gbgplc.com/as/token.oauth2
+security:
+- bearerAuth: []
+paths:
+  /as/token.oauth2:
+    post:
+      summary: Generate access token
+      description: Get an access token to authenticate API requests. If you're unfamiliar with the authentication process, check out the [authentication guide](/docs/developer-integration/execute-customer-journeys/authenticate) for more details.
+      servers:
+      - url: https://api.auth.gbgplc.com
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  description: The client ID assigned to your organization.
+                client_secret:
+                  type: string
+                  description: The client secret assigned to your organization.
+                username:
+                  type: string
+                  description: The username for API authentication.
+                password:
+                  type: string
+                  description: The password for API authentication.
+                grant_type:
+                  type: string
+                  enum:
+                  - password
+                  description: Must always be set to 'password'.
+              required:
+              - client_id
+              - client_secret
+              - username
+              - password
+              - grant_type
+      responses:
+        '200':
+          description: Successfully retrieved access token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: The access token used for authentication.
+                  expires_in:
+                    type: integer
+                    description: Token expiration time in seconds.
+                  token_type:
+                    type: string
+                    description: The type of token, usually 'Bearer'.
+        '400':
+          description: Invalid request. Check your credentials.
+        '401':
+          description: Unauthorized request. Invalid username or password.
+  /journey/start:
+    post:
+      summary: Start journey
+      description: Start a customer verification journey using a journey ID. You can also prefill customer data. For more details, see the [start journey guide](/docs/developer-integration/execute-customer-journeys/start-a-journey-step).
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resourceId:
+                  type: string
+                  description: Unique identifier for the journey. Append '@latest' to use the most recent version.
+                  example: 2ec919f77eb9858f16a9c102913f68c2ede2e31952d3e2b8f5ca7028d5c480bc@latest
+                context:
+                  type: object
+                  description: Prefilled identity data for the journey.
+                  example:
+                    subject:
+                      identity:
+                        firstName: John
+                        lastName: Doe
+                        dateOfBirth: '1990-01-01'
+                        emails:
+                        - type: home
+                          email: john.doe@example.com
+                      documents: []
+                      biometrics: []
+              required:
+              - resourceId
+      responses:
+        '200':
+          description: Journey started successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instanceId:
+                    type: string
+                    description: Unique identifier for the active journey instance.
+        '404':
+          description: Resource not found. This can happen when using an incorrect endpoint URL or an invalid resource ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: HTTP status code.
+                    example: 404
+                  message:
+                    type: string
+                    description: Error message describing what went wrong.
+                    example: Not Found Error, validate resource Id
+                  error:
+                    type: string
+                    description: Error identifier for programmatic handling.
+                    example: not-found-error
+        '405':
+          description: HTTP method not allowed for this endpoint. Make sure your journey version is included in the resource Id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: HTTP status code.
+                    example: 405
+                  message:
+                    type: string
+                    description: Error message explaining the method restriction.
+                    example: Method Not Allowed.
+                  error:
+                    type: string
+                    description: Error identifier for programmatic handling.
+                    example: method-not-allowed-error
+  /journey/task/list:
+    post:
+      summary: Retrieve tasks
+      description: Fetch tasks assigned to a customer during an active journey. If you're unsure how tasks work, the [retrieve tasks guide](/docs/developer-integration/execute-customer-journeys/retrieve-tasks-step) can help.
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instanceId:
+                  type: string
+                  description: Unique identifier for the journey instance.
+                  example: PiIuACmx8Q8R7qPnAkLAqBAT
+              required:
+              - instanceId
+      responses:
+        '201':
+          description: Tasks retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Current status of the journey.
+                    example: InProgress
+                  instanceId:
+                    type: string
+                    description: Unique identifier for the instance.
+                  tasks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        taskId:
+                          type: string
+                          description: Unique identifier for each task.
+                          example: TkoviRO58Q8R7qPnAkLAqBAT
+                        variantId:
+                          type: string
+                          description: Identifier for the task variant.
+                          example: age_verification_all_ssn_dob_required
+  /journey/task/list/schema:
+    post:
+      summary: Retrieve tasks with their schema
+      description: Fetch all currently active tasks along with their corresponding JSON schema. This allows you to see the expected input fields for each task in a single API call.
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instanceId:
+                  type: string
+                  description: Unique identifier for the journey instance.
+                  example: PiIuACmx8Q8R7qPnAkLAqBAT
+              required:
+              - instanceId
+      responses:
+        '201':
+          description: Successfully retrieved tasks and schemas.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - Completed
+                    - InProgress
+                    - Failed
+                    - Paused
+                    default: InProgress
+                    description: Current status of the journey instance.
+                  instanceId:
+                    type: string
+                    description: Unique identifier for the active journey instance.
+                  tasks:
+                    type: array
+                    description: List of active tasks for the journey instance.
+                    items:
+                      type: object
+                      properties:
+                        taskId:
+                          type: string
+                          description: Unique identifier for the task.
+                          example: Tkr7OENkIqYR8Y2CnrIW3TX-
+                        variantId:
+                          type: string
+                          description: Identifier for the task variant.
+                          example: US_AgeVerification_Source1IncludingDOB
+                        schema:
+                          type: object
+                          description: Contains a reference key that points to the corresponding schema definition in the schemas map.
+                      required:
+                      - taskId
+                      - variantId
+                      - schema
+                  schemas:
+                    type: object
+                    description: A map of schema identifiers to their JSON Schema (draft-07) definitions. Each key corresponds to the reference value in a task's schema object.
+                    additionalProperties:
+                      type: object
+                      description: JSON Schema defining the expected input structure for a task.
+                      properties:
+                        type:
+                          type: string
+                          example: object
+                        properties:
+                          type: object
+                          description: Top-level properties expected by the schema.
+                          properties:
+                            context:
+                              type: object
+                              description: The context object containing subject and metadata.
+                              properties:
+                                subject:
+                                  type: object
+                                  description: Subject data including identity and device information.
+                                  properties:
+                                    identity:
+                                      type: object
+                                      description: Identity fields such as firstName, lastNames, dateOfBirth, currentAddress, idNumbers, phones, and emails.
+                                      properties:
+                                        firstName:
+                                          type: string
+                                        lastNames:
+                                          type: array
+                                          items:
+                                            type: string
+                                        dateOfBirth:
+                                          type: string
+                                        currentAddress:
+                                          type: object
+                                          properties:
+                                            lines:
+                                              type: array
+                                              items:
+                                                type: string
+                                            locality:
+                                              type: string
+                                            administrativeArea:
+                                              type: string
+                                            dependentLocality:
+                                              type: string
+                                            postalCode:
+                                              type: string
+                                            country:
+                                              type: string
+                                        idNumbers:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              type:
+                                                type: string
+                                              idNumber:
+                                                type: string
+                                            required:
+                                            - type
+                                            - idNumber
+                                        phones:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              type:
+                                                type: string
+                                              number:
+                                                type: string
+                                            required:
+                                            - number
+                                        emails:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              type:
+                                                type: string
+                                              email:
+                                                type: string
+                                            required:
+                                            - email
+                                        idType:
+                                          type: string
+                                        idIssuer:
+                                          type: string
+                                        idNumber:
+                                          type: string
+                                      required:
+                                      - firstName
+                                      - lastNames
+                                    device:
+                                      type: object
+                                      description: Device information.
+                                      properties:
+                                        client:
+                                          type: object
+                                          properties:
+                                            ip:
+                                              type: string
+                                    uid:
+                                      type: string
+                                  required:
+                                  - identity
+                                metadata:
+                                  type: object
+                                  description: Optional metadata fields.
+                                  properties:
+                                    invoice:
+                                      type: string
+                                    amount:
+                                      type: string
+                                    shipping:
+                                      type: string
+                                    tax:
+                                      type: string
+                                    total:
+                                      type: string
+                                    paymentMethod:
+                                      type: string
+                                    sku:
+                                      type: string
+                                    purchaseDate:
+                                      type: string
+                                    captureQueryId:
+                                      type: string
+                                    score:
+                                      type: string
+                                    custom1:
+                                      type: string
+                                    custom2:
+                                      type: string
+                                    custom3:
+                                      type: string
+                              required:
+                              - subject
+                          required:
+                          - context
+                        required:
+                          type: array
+                          items:
+                            type: string
+                          description: List of required top-level fields.
+                required:
+                - instanceId
+                - status
+                - tasks
+                - schemas
+  /journey/task/schema:
+    post:
+      summary: Retrieve task schema
+      description: Fetch the schema for a specific task to see the required fields and expected data structure. This schema defines the format of data required to complete the task.
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskId:
+                  type: string
+                  description: Unique identifier for the task assigned to the customer.
+                  example: TkoviRO58Q8R7qPnAkLAqBAT
+              required:
+              - taskId
+      responses:
+        '201':
+          description: Schema retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  $schema:
+                    type: string
+                    description: The JSON Schema version of the schema.
+                  type:
+                    type: string
+                    description: The type of the schema.
+                  properties:
+                    type: object
+                    description: An object containing the properties of the schema.
+                  required:
+                    type: array
+                    items:
+                      type: string
+                    description: An array of the required properties of the schema.
+                required:
+                - $schema
+                - type
+                - properties
+                - required
+  /journey/task/update:
+    post:
+      summary: Submit task data
+      description: Send data to complete a task in a customer’s journey. See the [submit data guide](/docs/developer-integration/execute-customer-journeys/submit-task-data-step) for details.
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                intent:
+                  type: string
+                  description: The intent of the request.
+                  example: Complete
+                instanceId:
+                  type: string
+                  description: Unique identifier for the active journey instance.
+                  example: PiIbYsgiHp4R8JPz2vU5Y9l4
+                taskId:
+                  type: string
+                  description: Unique identifier for the task being updated.
+                  example: Tkob6dMMHp4R8JPz2vU5Y9l4
+                context:
+                  type: object
+                  description: The data required to complete the task.
+                  properties:
+                    subject:
+                      type: object
+                      properties:
+                        identity:
+                          type: object
+                          properties:
+                            currentAddress:
+                              type: object
+                              properties:
+                                country:
+                                  type: string
+                                  example: GBR
+                                postalCode:
+                                  type: string
+                                  example: BA133BN
+                                locality:
+                                  type: string
+                                  example: Westbury
+                                thoroughfare:
+                                  type: string
+                                  example: High Street
+                                building:
+                                  type: string
+                                  example: '4'
+                                administrativeArea:
+                                  type: string
+                                  example: Wilts
+                            dateOfBirth:
+                              type: string
+                              format: date
+                              example: '1967-01-01'
+                            firstName:
+                              type: string
+                              example: pari
+                            middleNames:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - c
+                            lastNames:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - powell
+              required:
+              - intent
+              - instanceId
+              - taskId
+      responses:
+        '201':
+          description: Task data submitted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instanceId:
+                    type: string
+                    description: Unique identifier for the active journey instance.
+                  taskId:
+                    type: string
+                    description: Unique identifier for the task.
+  /journey/state/fetch:
+    post:
+      summary: Fetch journey state
+      description: Check the status and progress of a journey. The [fetch journey state guide](/docs/developer-integration/execute-customer-journeys/fetch-journey-state-step) explains more.
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instanceId:
+                  type: string
+                  description: Unique identifier for the journey instance.
+                  example: PiIuACmx8Q8R7qPnAkLAqBAT
+              required:
+              - instanceId
+      responses:
+        '200':
+          description: Journey state retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metaData:
+                    type: object
+                    description: Timestamps related to the journey instance.
+                    properties:
+                      createdTime:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the journey was created.
+                        example: '2024-02-15T22:16:33.213Z'
+                      completedTime:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the journey was completed, if applicable.
+                        example: '2024-02-15T22:16:33.213Z'
+                  status:
+                    type: string
+                    description: Current status of the journey (e.g., InProgress, Completed).
+                    example: InProgress
+                  data:
+                    type: object
+                    description: Additional data related to the journey instance.
+                  instanceId:
+                    type: string
+                    description: Unique identifier for the journey instance.
+                    example: PiIuACmx8Q8R7qPnAkLAqBAT
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

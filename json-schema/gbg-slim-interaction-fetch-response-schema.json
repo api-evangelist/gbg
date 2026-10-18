@@ -1,0 +1,867 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/gbg/main/json-schema/gbg-slim-interaction-fetch-response-schema.json",
+  "title": "SlimInteractionFetchResponse",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/gbg-go-v2-openapi.yml#/components/schemas/SlimInteractionFetchResponse",
+  "type": "object",
+  "properties": {
+    "instanceId": {
+      "type": "string"
+    },
+    "interactionId": {
+      "type": "string"
+    },
+    "journey": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "InProgress",
+            "Completed",
+            "Failed",
+            "Paused"
+          ]
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "interaction": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "processing": {
+      "type": "boolean"
+    },
+    "outstanding": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outstandingGroups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "elementId": {
+            "type": "string"
+          },
+          "cardinality": {
+            "type": "string",
+            "enum": [
+              "at-least-one"
+            ]
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "elementId",
+          "cardinality",
+          "refs"
+        ]
+      }
+    },
+    "instructions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "result": {
+      "$ref": "#/$defs/SlimResult"
+    },
+    "joinedDevice": {
+      "type": "object",
+      "properties": {
+        "connected": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "connected"
+      ]
+    }
+  },
+  "required": [
+    "instanceId",
+    "journey"
+  ],
+  "$defs": {
+    "GbgError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^\\d{4}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "problem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "location": {
+          "type": "string",
+          "enum": [
+            "Path",
+            "Authorization",
+            "Header",
+            "Query String",
+            "Request",
+            "Body",
+            "Service",
+            "Flow"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "name",
+        "problem",
+        "action"
+      ]
+    },
+    "SlimDocument": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "subType": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string",
+          "minLength": 1
+        },
+        "issueDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601"
+        },
+        "expiryDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601"
+        },
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2,3}$",
+          "description": "Country the address is in. It must be a valid ISO2 or ISO3 country code"
+        },
+        "classification": {
+          "type": "object",
+          "properties": {
+            "ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "category": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "subtype": {
+              "type": "string"
+            },
+            "isDoubleSided": {
+              "type": "boolean"
+            },
+            "hasNFC": {
+              "type": "boolean"
+            },
+            "year": {
+              "type": "string"
+            },
+            "countryCode": {
+              "type": "string"
+            },
+            "countryName": {
+              "type": "string"
+            },
+            "stateCode": {
+              "type": "string"
+            },
+            "stateName": {
+              "type": "string"
+            },
+            "sides": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "side": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "documentQuality": {
+                    "type": "string"
+                  },
+                  "documentQualityScore": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "side",
+                  "id",
+                  "documentQuality",
+                  "documentQualityScore"
+                ]
+              }
+            }
+          }
+        },
+        "extraction": {
+          "$ref": "#/$defs/SlimExtraction"
+        },
+        "validation": {
+          "$ref": "#/$defs/SlimValidation"
+        }
+      }
+    },
+    "SlimExtraction": {
+      "type": "object",
+      "properties": {
+        "aggregatedFields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "isNonLatin": {
+                "type": "boolean"
+              },
+              "regionOfInterest": {
+                "type": "object",
+                "properties": {
+                  "boundingBox": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "width": {
+                        "type": "number"
+                      },
+                      "height": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "width",
+                      "height"
+                    ]
+                  },
+                  "side": {
+                    "type": "string"
+                  },
+                  "spectrum": {
+                    "type": "string"
+                  },
+                  "imageId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "side"
+                ]
+              }
+            },
+            "required": [
+              "label",
+              "value",
+              "source",
+              "isNonLatin"
+            ]
+          }
+        },
+        "extractedFields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "isNonLatin": {
+                      "type": "boolean"
+                    },
+                    "regionOfInterest": {
+                      "type": "object",
+                      "properties": {
+                        "boundingBox": {
+                          "type": "object",
+                          "properties": {
+                            "x": {
+                              "type": "number"
+                            },
+                            "y": {
+                              "type": "number"
+                            },
+                            "width": {
+                              "type": "number"
+                            },
+                            "height": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "x",
+                            "y",
+                            "width",
+                            "height"
+                          ]
+                        },
+                        "side": {
+                          "type": "string"
+                        },
+                        "spectrum": {
+                          "type": "string"
+                        },
+                        "imageId": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "side"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "value",
+                    "source",
+                    "isNonLatin"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "label",
+              "details"
+            ]
+          }
+        }
+      }
+    },
+    "SlimIdentity": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Title of an individual such as Mr, Mrs, Dr, Sir"
+        },
+        "firstName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A person's name used by their collegues and friends to address them"
+        },
+        "middleNames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Any other registered names used by the individual, not aliases"
+        },
+        "lastNames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "description": "Any family names for the individual"
+        },
+        "lastNamesAtBirth": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "description": "Any family names for the individual"
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Specified in year, month and day separated by -.  For example 2017-1-1 or 2017-01-01 which conforms to ISO 8601"
+        },
+        "gender": {
+          "type": "string",
+          "minLength": 1
+        },
+        "currentAddress": {
+          "type": "object",
+          "properties": {
+            "lines": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Unformatted line based address"
+            },
+            "addressString": {
+              "type": "string",
+              "description": "The address as a single line"
+            },
+            "premise": {
+              "type": "string",
+              "description": "The number identifying the property's delivery point on its street — \"128\", \"30A\", \"8-12\". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name."
+            },
+            "building": {
+              "type": "string",
+              "description": "The name of the building, complex, or named property — \"Landmark House\", \"The Shard\". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty."
+            },
+            "subBuilding": {
+              "type": "string",
+              "description": "The unit within the property, such as a flat, apartment or suite number — \"FLAT 1\", \"SUITE 212\"."
+            },
+            "thoroughfare": {
+              "type": "string",
+              "description": "This field holds the most common street or block data element within a country. For instance, USA Street"
+            },
+            "dependentThoroughfare": {
+              "type": "string",
+              "description": "The name of a dependent street or block, such as a street within a complex."
+            },
+            "locality": {
+              "type": "string",
+              "description": "This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality"
+            },
+            "dependentLocality": {
+              "type": "string",
+              "description": "This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London."
+            },
+            "doubleDependentLocality": {
+              "type": "string",
+              "description": "This is an even smaller area within a dependent locality, often used in very detailed addresses."
+            },
+            "postalCode": {
+              "type": "string",
+              "description": "This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US"
+            },
+            "postBox": {
+              "type": "string",
+              "description": "This field contains the post box number associated with a particular delivery point, should one exist."
+            },
+            "country": {
+              "type": "string",
+              "pattern": "^[A-Z]{2,3}$",
+              "description": "Country the address is in. It must be a valid ISO2 or ISO3 country code"
+            },
+            "superAdministrativeArea": {
+              "type": "string"
+            },
+            "administrativeArea": {
+              "type": "string"
+            },
+            "subAdministrativeArea": {
+              "type": "string"
+            },
+            "organization": {
+              "type": "string"
+            },
+            "location": {
+              "type": "object",
+              "properties": {
+                "latitude": {
+                  "type": "string"
+                },
+                "longitude": {
+                  "type": "string"
+                },
+                "geoAccuracy": {
+                  "type": "string"
+                },
+                "what3words": {
+                  "type": "string",
+                  "description": "A What3words designation associated with this location with '.' separator."
+                }
+              }
+            }
+          }
+        },
+        "placeOfBirth": {
+          "type": "object",
+          "properties": {
+            "lines": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Unformatted line based address"
+            },
+            "addressString": {
+              "type": "string",
+              "description": "The address as a single line"
+            },
+            "premise": {
+              "type": "string",
+              "description": "The number identifying the property's delivery point on its street — \"128\", \"30A\", \"8-12\". Not the street name (thoroughfare), the unit (subBuilding), or a building or property name (building). Empty for a property identified only by a name."
+            },
+            "building": {
+              "type": "string",
+              "description": "The name of the building, complex, or named property — \"Landmark House\", \"The Shard\". Never the street number, in any country; that is premise. A property identified only by a name populates this field with premise left empty."
+            },
+            "subBuilding": {
+              "type": "string",
+              "description": "The unit within the property, such as a flat, apartment or suite number — \"FLAT 1\", \"SUITE 212\"."
+            },
+            "thoroughfare": {
+              "type": "string",
+              "description": "This field holds the most common street or block data element within a country. For instance, USA Street"
+            },
+            "dependentThoroughfare": {
+              "type": "string",
+              "description": "The name of a dependent street or block, such as a street within a complex."
+            },
+            "locality": {
+              "type": "string",
+              "description": "This field holds the most common population center data element within a country. For instance, USA City, Canadian Municipality"
+            },
+            "dependentLocality": {
+              "type": "string",
+              "description": "This is a smaller area within a locality, such as a neighborhood or district. Like Manhattan in New York City, or Soho in London."
+            },
+            "doubleDependentLocality": {
+              "type": "string",
+              "description": "This is an even smaller area within a dependent locality, often used in very detailed addresses."
+            },
+            "postalCode": {
+              "type": "string",
+              "description": "This field contains the complete postal code for a particular delivery point, should such detail be able to be determined. For example ZIP code in the US"
+            },
+            "postBox": {
+              "type": "string",
+              "description": "This field contains the post box number associated with a particular delivery point, should one exist."
+            },
+            "country": {
+              "type": "string",
+              "pattern": "^[A-Z]{2,3}$",
+              "description": "Country the address is in. It must be a valid ISO2 or ISO3 country code"
+            },
+            "superAdministrativeArea": {
+              "type": "string"
+            },
+            "administrativeArea": {
+              "type": "string"
+            },
+            "subAdministrativeArea": {
+              "type": "string"
+            },
+            "organization": {
+              "type": "string"
+            },
+            "location": {
+              "type": "object",
+              "properties": {
+                "latitude": {
+                  "type": "string"
+                },
+                "longitude": {
+                  "type": "string"
+                },
+                "geoAccuracy": {
+                  "type": "string"
+                },
+                "what3words": {
+                  "type": "string",
+                  "description": "A What3words designation associated with this location with '.' separator."
+                }
+              }
+            }
+          }
+        },
+        "idNumbers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "The type of phone number, such as landline, mobile, fax, unknown etc"
+              },
+              "idNumber": {
+                "type": "string",
+                "minLength": 1,
+                "description": "ID number eg, National Insurance Number in UK, Social Securtiy Number in US"
+              },
+              "country": {
+                "type": "string",
+                "pattern": "^[A-Z]{2,3}$",
+                "description": "Country the address is in. It must be a valid ISO2 or ISO3 country code"
+              }
+            },
+            "required": [
+              "type",
+              "idNumber"
+            ]
+          }
+        }
+      }
+    },
+    "SlimResult": {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "complete",
+            "error",
+            "timeout"
+          ],
+          "description": "Headline result state, and the AUTHORITATIVE signal for whether the journey succeeded. `complete` means the journey finished. `error` means it ended in failure: either a module reported a terminal error, or the platform abandoned the journey before it could finish (a deadlock, an interaction or execution timeout, or a spin). Abandonment is reported as `error` rather than as a distinct value. `pending` is reported for a running journey once its state has materialized. `timeout` is part of this range but is not currently emitted at journey level — an elapsed deadline surfaces as `error`. When `status` disagrees with `outcome` or `outcomeClassification`, `status` wins: a journey can pass an evaluation and then fail before finishing, leaving a positive classification beside `status: \"error\"`. Both are true — the evaluation did pass — but the journey did not complete, so do not read a positive classification as success. Note also that an `error` caused by abandonment is generally NOT retryable — a deadlocked journey deadlocks again — even though the accompanying error advises a retry; start a new journey instead."
+        },
+        "outcomeClassification": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "positive",
+            "negative",
+            "neutral",
+            null
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GbgError"
+          },
+          "minItems": 1
+        },
+        "data": {
+          "$ref": "#/$defs/SlimVerifiedData"
+        }
+      }
+    },
+    "SlimValidation": {
+      "type": "object",
+      "properties": {
+        "validationChecks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "validationResult": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "string"
+              },
+              "regionOfInterests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "boundingBox": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "width",
+                        "height"
+                      ]
+                    },
+                    "side": {
+                      "type": "string"
+                    },
+                    "spectrum": {
+                      "type": "string"
+                    },
+                    "imageId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "side"
+                  ]
+                }
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "title",
+              "validationResult",
+              "weight",
+              "type"
+            ]
+          }
+        },
+        "aggregatedValidationChecks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "validationResult": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "string"
+              },
+              "regionOfInterests": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "boundingBox": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "width",
+                        "height"
+                      ]
+                    },
+                    "side": {
+                      "type": "string"
+                    },
+                    "spectrum": {
+                      "type": "string"
+                    },
+                    "imageId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "side"
+                  ]
+                }
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "title",
+              "validationResult",
+              "weight",
+              "type"
+            ]
+          }
+        }
+      }
+    },
+    "SlimVerifiedData": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/SlimIdentity"
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SlimDocument"
+          }
+        }
+      },
+      "description": "Verified-output slice (OQ-A). May be transiently ABSENT on a journey already reporting `status: complete`: the certified view materializes just after the completion signal, so a client reading `data` the instant it sees `complete` may need to re-poll once. Absent `data` means \"not yet available\", not \"no verified data\". (Read-after-write closure tracked in GGO-16738.)"
+    }
+  }
+}
