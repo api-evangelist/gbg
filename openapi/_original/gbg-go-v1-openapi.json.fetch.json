@@ -1,0 +1,12 @@
+{
+ "url": "https://docs.go.gbgplc.com/docs/openapi.json",
+ "requested_url": "https://docs.go.gbgplc.com/docs/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 36296,
+ "sha256": "17661f8b5e9ac61c2b6cd7d6d3be5d317b64ab2e45f349cd7353435841e6a759",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
