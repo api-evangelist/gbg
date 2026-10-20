@@ -1,16 +1,53 @@
 generated: '2026-10-18'
-method: none
+method: searched
 source:
 - https://zapier.com/apps/gbg/integrations
 - https://n8n.io/integrations/gbg/
 - https://composio.dev/toolkits/gbg
 - https://monid.ai/tools/gbg
 checked:
+- https://api.nuget.org/v3
 - https://composio.dev/toolkits/gbg
+- https://crates.io/api/v1
 - https://monid.ai/tools/gbg
 - https://n8n.io/integrations/gbg/
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
 - https://zapier.com/apps/gbg/integrations
 summary: null
 marketplace_apps: []
-edges: []
+edges:
+- partner_name: npm registry
+  partner: npm
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (JavaScript/TypeScript)
+  evidence: https://www.npmjs.com/package/@gbg/go-core
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@gbg/go-core'
+      version: 0.1.3
+      released: '2026-10-08'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@gbg/go-core
+      repo_leg: github-org:gbgplc
+      publisher_leg: email:gbgplc.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-20'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-20'
 templates: []
